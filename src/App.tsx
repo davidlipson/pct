@@ -34,7 +34,6 @@ const AppContainer = styled(Stack)(({ theme }) => ({
   display: "flex",
   alignSelf: "center",
   alignItems: "center",
-  height: "100vh",
   [theme.breakpoints.down("md")]: {
     padding: "0px 24px",
   },
@@ -50,7 +49,7 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   display: "flex",
   alignSelf: "center",
   alignItems: "center",
-  height: "100vh",
+  height: "100%",
   gap: "16px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
@@ -101,6 +100,18 @@ const App = () => {
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<boolean>(null);
   const [howToPlay, setHowToPlay] = useState<boolean>(false);
+  const [height, setHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setHeight(window.innerHeight);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -269,6 +280,7 @@ const App = () => {
       <Share setNotice={setNotice} />
 
       <AppContainer
+        sx={{ height: `${height}px` }}
         tabIndex={0}
         ref={ref}
         onKeyUp={(e) => updateCurrentGuess(e.key)}
