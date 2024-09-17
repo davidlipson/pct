@@ -32,7 +32,7 @@ const AppContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   display: "flex",
-  alignSelf: "center",
+alignSelf: "center",
   alignItems: "center",
   [theme.breakpoints.down("md")]: {
     padding: "0px 24px",

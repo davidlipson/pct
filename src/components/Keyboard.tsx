@@ -1,6 +1,4 @@
-import CheckIcon from "@mui/icons-material/Check";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ColourScheme } from "../constants/colourScheme";
 import { QWERTY } from "../constants/constants";
@@ -8,6 +6,7 @@ import { QWERTY } from "../constants/constants";
 const firstRow = QWERTY[0].toLowerCase().split("");
 const secondRow = QWERTY[1].toLowerCase().split("");
 const thirdRow = QWERTY[2].toLowerCase().split("");
+const GAP = "7px";
 
 const KeyboardStack = styled(Stack)(({ theme }) => ({
   "& .key:hover": {
@@ -16,7 +15,7 @@ const KeyboardStack = styled(Stack)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  gap: "10px",
+  gap: GAP,
   "& .key": {
     border: `1px solid ${ColourScheme.GREY}`,
   },
@@ -25,7 +24,7 @@ const KeyboardStack = styled(Stack)(({ theme }) => ({
 const KeyRow = styled(Stack)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  gap: "10px",
+  gap: GAP,
   justifyContent: "center",
 }));
 
