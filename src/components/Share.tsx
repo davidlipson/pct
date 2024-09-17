@@ -27,10 +27,10 @@ export const Share = ({
             .map((letter) => letter.toUpperCase())
             .join("")})!\n${words
             .map((word) => word.word[0].toUpperCase() + word.word.slice(1))
-            .join(", ")}`;
+            .join(", ")}.`;
         }
         navigator.clipboard.writeText(
-          `${firstLine}.\n\nPlay now at https://pctgame.com`
+          `${firstLine}\n\nPlay now at https://pctgame.com`
         );
         setNotice("Copied to clipboard!");
       }}

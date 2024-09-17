@@ -181,7 +181,9 @@ const App = () => {
 
   const updateCurrentGuess = async (key: string) => {
     if (found !== null) {
-      return;
+      setFound(null);
+      setNotice(null);
+      setCurrentGuess("");
     }
     if (key === "Enter") {
       if (currentGuess.length >= 3) {
@@ -210,7 +212,7 @@ const App = () => {
       if (found) {
         setCurrentGuess("");
       }
-    }, 1000);
+    }, 750);
 
     return () => clearTimeout(timer);
   }, [found]);
@@ -222,7 +224,7 @@ const App = () => {
 
     const timer = setTimeout(() => {
       setNotice(null);
-    }, 1000);
+    }, 750);
 
     return () => clearTimeout(timer);
   }, [notice]);

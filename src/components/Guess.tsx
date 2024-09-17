@@ -65,7 +65,7 @@ export const Guess = ({ guess, found }: { guess: string; found: boolean }) => {
               found === false
                 ? "nope 0.5s infinite"
                 : found && letter !== " "
-                ? "woo 1s infinite"
+                ? "woo 0.75s infinite"
                 : "none",
             animationIterationCount: 1,
           }}

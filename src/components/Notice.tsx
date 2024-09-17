@@ -57,7 +57,7 @@ export const Notice = ({
           animationIterationCount: 1,
         }}
       >
-        <Text small={found === null}>{notice}</Text>
+        <Text small>{notice}</Text>
       </Container>
     );
   }
