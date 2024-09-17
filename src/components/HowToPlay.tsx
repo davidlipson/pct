@@ -21,11 +21,7 @@ const Toggle = styled(Box)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-const HowToPlayContainer = styled(Box)(({ theme }) => ({
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
-}));
+const HowToPlayContainer = styled(Box)(({ theme }) => ({}));
 
 export const HowToPlay = ({
   howToPlay,

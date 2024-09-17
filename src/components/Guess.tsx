@@ -42,7 +42,8 @@ export const Guess = ({ guess, found }: { guess: string; found: boolean }) => {
       {paddedGuess.split("").map((letter, index) => (
         <Letter
           sx={{
-            borderColor: letters.includes(letter) && ColourScheme.GREEN,
+            borderColor:
+              letters.includes(letter) && `${ColourScheme.GREEN} !important`,
             "@keyframes nope": {
               "0%": {
                 transform: "translateX(0)",

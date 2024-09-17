@@ -10,6 +10,10 @@ const ShareButton = styled(Box)(({ theme }) => ({
   top: "20px",
   right: "60px",
   cursor: "pointer",
+  [theme.breakpoints.down("sm")]: {
+    left: "20px",
+    right: "unset",
+  },
 }));
 
 export const Share = ({

@@ -6,6 +6,7 @@ import {
   Keyboard,
   Letters,
   Notice,
+  Score,
   Share,
   Words,
 } from "./components";
@@ -53,8 +54,6 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   gap: "16px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
-  },
-  [theme.breakpoints.down("sm")]: {
     justifyContent: "flex-start",
     paddingTop: "48px",
     gap: "8px",
@@ -266,9 +265,10 @@ const App = () => {
         onKeyUp={(e) => updateCurrentGuess(e.key)}
       >
         <InnerContainer>
+          <Score found={found} notice={notice} />
           <Letters />
-          <Guess found={found} guess={currentGuess} />
           <BottomContainer>
+            <Guess found={found} guess={currentGuess} />
             <Words />
             <Keyboard submitKey={updateCurrentGuess} />
           </BottomContainer>
