@@ -21,6 +21,12 @@ const Toggle = styled(Box)(({ theme }) => ({
   cursor: "pointer",
 }));
 
+const HowToPlayContainer = styled(Box)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    display: "none",
+  },
+}));
+
 export const HowToPlay = ({
   howToPlay,
   setHowToPlay,
@@ -29,7 +35,7 @@ export const HowToPlay = ({
   setHowToPlay: any;
 }) => {
   return (
-    <>
+    <HowToPlayContainer>
       <Toggle onClick={() => setHowToPlay(!howToPlay)}>
         {howToPlay ? <CancelIcon /> : <HelpIcon />}
       </Toggle>
@@ -38,6 +44,6 @@ export const HowToPlay = ({
           <Typography variant="h4">How to Play PCT</Typography>
         </Container>
       )}
-    </>
+    </HowToPlayContainer>
   );
 };

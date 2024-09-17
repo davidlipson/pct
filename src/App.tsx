@@ -47,6 +47,10 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     width: "100%",
   },
+  [theme.breakpoints.down("sm")]: {
+    justifyContent: "flex-start",
+    paddingTop: "48px",
+  },
 }));
 
 export const GameContext = createContext<GameContextType>(
