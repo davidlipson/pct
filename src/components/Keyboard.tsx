@@ -16,23 +16,34 @@ const KeyboardStack = styled(Stack)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
+  gap: "3px",
   "& .key": {
     border: `1px solid ${ColourScheme.GREY}`,
   },
-  backgroundColor: ColourScheme.GREY,
+}));
+
+const KeyRow = styled(Stack)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  gap: "3px",
+  justifyContent: "center",
 }));
 
 const Key = styled(Box)(({ theme }) => ({
   backgroundColor: ColourScheme.GREY,
+  borderRadius: "4px",
   fontSize: "20px",
   textAlign: "center",
-  width: "50px",
+  width: "40px",
   height: "50px",
-  padding: "10px",
+  padding: "5px",
   alignContent: "center",
   cursor: "pointer",
   [theme.breakpoints.down("md")]: {
     width: "100%",
+  },
+  ":hover": {
+    opacity: 0.6,
   },
 }));
 
@@ -43,35 +54,33 @@ export const Keyboard = ({
 }) => {
   return (
     <KeyboardStack>
-      <div className="row">
+      <KeyRow>
         {firstRow.map((c) => (
           <Key key={c} onClick={() => submitKey(c)}>
             {c.toUpperCase()}
           </Key>
         ))}
-      </div>
-      <div className="row">
+      </KeyRow>
+      <KeyRow>
+        {secondRow.map((c) => (
+          <Key key={c} onClick={() => submitKey(c)}>
+            {c.toUpperCase()}
+          </Key>
+        ))}
+      </KeyRow>
+      <KeyRow>
         <Key className="backspace" onClick={() => submitKey("Backspace")}>
           <KeyboardBackspaceIcon id="delete" />
         </Key>
-        {secondRow.map((c) => (
-          <Key key={c} onClick={() => submitKey(c)}>
+        {thirdRow.map((c) => (
+          <Key onClick={() => submitKey(c)} key={c}>
             {c.toUpperCase()}
           </Key>
         ))}
         <Key className="enter" onClick={() => submitKey("Enter")}>
           <CheckIcon id="checkmark" fontSize="large" />
         </Key>
-      </div>
-      <div className="row">
-        <Key className=" spacer" />
-        {thirdRow.map((c) => (
-          <Key onClick={() => submitKey(c)} key={c}>
-            {c.toUpperCase()}
-          </Key>
-        ))}
-        <Key className="spacer" />
-      </div>
+      </KeyRow>
     </KeyboardStack>
   );
 };

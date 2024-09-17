@@ -34,6 +34,12 @@ const AppContainer = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
   alignItems: "center",
   height: "100vh",
+  [theme.breakpoints.down("md")]: {
+    padding: "0px 24px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: "0px 8px",
+  },
 }));
 
 const InnerContainer = styled(Stack)(({ theme }) => ({
@@ -44,12 +50,28 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
   alignItems: "center",
   height: "100vh",
+  gap: "16px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
     justifyContent: "flex-start",
     paddingTop: "48px",
+    gap: "8px",
+  },
+}));
+
+const BottomContainer = styled(Stack)(({ theme }) => ({
+  flexDirection: "column",
+  gap: "16px",
+  [theme.breakpoints.down("md")]: {
+    position: "absolute",
+    bottom: 10,
+    width: "95vw",
+    padding: "10px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    gap: "8px",
   },
 }));
 
@@ -243,11 +265,13 @@ const App = () => {
         ref={ref}
         onKeyUp={(e) => updateCurrentGuess(e.key)}
       >
-        <InnerContainer spacing={2}>
+        <InnerContainer>
           <Letters />
           <Guess found={found} guess={currentGuess} />
-          <Keyboard submitKey={updateCurrentGuess} />
-          <Words />
+          <BottomContainer>
+            <Words />
+            <Keyboard submitKey={updateCurrentGuess} />
+          </BottomContainer>
           <Notice found={found} notice={notice} />
         </InnerContainer>
       </AppContainer>

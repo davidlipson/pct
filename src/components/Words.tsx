@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ColourScheme } from "../constants/colourScheme";
 
 const WordStack = styled(Stack)(({ theme }) => ({
   maxHeight: "300px",
@@ -20,7 +21,6 @@ const Entry = styled(Stack)(({ theme }) => ({
   flexDirection: "row",
   justifyContent: "space-between",
   padding: "2px",
-  borderBottom: "1px solid #ddd",
   alignItems: "center",
 }));
 
@@ -31,6 +31,8 @@ export const Words = () => {
       <Accordion
         sx={{
           paddingX: "20px",
+          boxShadow: "none",
+          border: `1.5px solid ${ColourScheme.GREY}`,
         }}
       >
         <AccordionSummary

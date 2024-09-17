@@ -7,26 +7,30 @@ import { MAX_GUESS_LENGTH } from "../constants/constants";
 
 const Letter = styled(Box)(({ theme }) => ({
   textAlign: "center",
-  padding: "3px",
   alignContent: "center",
-  height: "60px",
+  height: "100%",
   width: "60px",
   fontSize: "30px",
-  border: `2px solid ${ColourScheme.GREY}`,
+  border: `1.5px solid ${ColourScheme.GREY}`,
   [theme.breakpoints.down("sm")]: {
     width: "100%",
-    padding: "5px",
+    height: "40px",
     fontSize: "16px",
+    border: `1px solid ${ColourScheme.GREY}`,
   },
 }));
 
 const GuessStack = styled(Stack)(({ theme }) => ({
   display: "flex",
-  height: "75px",
+  height: "60px",
   width: "100%",
   justifyContent: "space-between",
   [theme.breakpoints.down("md")]: {
     width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "40px",
+    gap: "3px",
   },
 }));
 

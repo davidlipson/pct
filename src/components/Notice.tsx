@@ -10,7 +10,7 @@ type TextProps = {
 };
 
 const Container = styled(Stack)(({ theme }) => ({
-  height: "20px",
+  height: "48px",
   flexDirection: "row",
   gap: "5px",
   width: "100%",
@@ -21,6 +21,9 @@ const Text = styled(Typography)<TextProps>(({ theme, points, small }) => ({
   color: points ? ColourScheme.GREEN : "black",
   fontSize: small ? "16px" : "40px",
   fontWeight: 700,
+  [theme.breakpoints.down("sm")]: {
+    fontSize: small ? "16px" : "100px",
+  },
 }));
 
 export const Notice = ({
