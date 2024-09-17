@@ -30,7 +30,7 @@ export const Share = ({
             .join(", ")}`;
         }
         navigator.clipboard.writeText(
-          `${firstLine}.\n\nPlay now at https://pct.vercel.app`
+          `${firstLine}.\n\nPlay now at https://pctgame.com`
         );
         setNotice("Copied to clipboard!");
       }}

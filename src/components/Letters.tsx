@@ -11,6 +11,7 @@ const LetterContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+// add animation! jumbling letters
 export const Letters = () => {
   const { letters } = useContext(GameContext);
   return (

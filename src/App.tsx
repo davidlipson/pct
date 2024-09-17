@@ -63,25 +63,25 @@ const localStorageId = "pct";
 const App = () => {
   const ref = useRef(null);
   const [currentGuess, setCurrentGuess] = useState<string>("");
-  const [letters, setLetters] = useState<string[]>(todaysLetters());
+  const [letters, _] = useState<string[]>(todaysLetters());
   const [words, setWords] = useState<Word[]>([]);
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<boolean>(null);
   const [howToPlay, setHowToPlay] = useState<boolean>(false);
 
   useEffect(() => {
-    const { words, letters } = JSON.parse(
+    const { words: storedWords, letters: storedLetters } = JSON.parse(
       localStorage.getItem(localStorageId) || "{}"
     ) as StoredValues;
 
     // if letters changed on backend, reset words and storage
-    if (letters.join("") !== todaysLetters().join("")) {
+    if (letters.join("") !== storedLetters.join("")) {
       localStorage.setItem(
         localStorageId,
         JSON.stringify({ words: [], letters })
       );
-    } else if (words) {
-      setWords(words);
+    } else if (storedWords) {
+      setWords(storedWords);
     }
   }, []);
 
