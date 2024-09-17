@@ -70,18 +70,22 @@ const App = () => {
   const [howToPlay, setHowToPlay] = useState<boolean>(false);
 
   useEffect(() => {
-    const { words: storedWords, letters: storedLetters } = JSON.parse(
-      localStorage.getItem(localStorageId) || "{}"
-    ) as StoredValues;
+    try {
+      const { words: storedWords, letters: storedLetters } = JSON.parse(
+        localStorage.getItem(localStorageId) || "{}"
+      ) as StoredValues;
 
-    // if letters changed on backend, reset words and storage
-    if (letters.join("") !== storedLetters.join("")) {
-      localStorage.setItem(
-        localStorageId,
-        JSON.stringify({ words: [], letters })
-      );
-    } else if (storedWords) {
-      setWords(storedWords);
+      // if letters changed on backend, reset words and storage
+      if (letters.join("") !== storedLetters.join("")) {
+        localStorage.setItem(
+          localStorageId,
+          JSON.stringify({ words: [], letters })
+        );
+      } else if (storedWords) {
+        setWords(storedWords);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }, []);
 

@@ -28,7 +28,6 @@ export const HowToPlay = ({
   howToPlay: boolean;
   setHowToPlay: any;
 }) => {
-  console.log(howToPlay);
   return (
     <>
       <Toggle onClick={() => setHowToPlay(!howToPlay)}>
