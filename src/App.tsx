@@ -11,7 +11,7 @@ import {
   Words,
 } from "./components";
 import { styled } from "@mui/material/styles";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { MAX_GUESS_LENGTH } from "./constants/constants";
 import { todaysLetters } from "./utils";
 
@@ -54,8 +54,18 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   gap: "16px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     paddingTop: "48px",
+    gap: "8px",
+  },
+}));
+
+const TopContainer = styled(Stack)(({ theme }) => ({
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "16px",
+  [theme.breakpoints.down("sm")]: {
     gap: "8px",
   },
 }));
@@ -64,10 +74,8 @@ const BottomContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   gap: "16px",
   [theme.breakpoints.down("md")]: {
-    position: "absolute",
-    bottom: 10,
     width: "95vw",
-    padding: "10px",
+    padding: "10px 10px 15px 10px",
   },
   [theme.breakpoints.down("sm")]: {
     gap: "8px",
@@ -192,7 +200,7 @@ const App = () => {
     // if valid, calculate points and update add points to total
     setFound(true);
     const points = calculatePoints(word);
-    setNotice(`+${points} points!`);
+    setNotice(`+${points}`);
 
     setWords((prev) => [...prev, { word, points }]);
     return true;
@@ -215,6 +223,7 @@ const App = () => {
         await submitWord(currentGuess);
       } else {
         setNotice("Word must be at least 3 characters long!");
+        setFound(false);
       }
     } else if (key === "Backspace") {
       setCurrentGuess((prev) => prev.slice(0, prev.length - 1));
@@ -237,7 +246,7 @@ const App = () => {
       if (found) {
         setCurrentGuess("");
       }
-    }, 750);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [found]);
@@ -249,7 +258,7 @@ const App = () => {
 
     const timer = setTimeout(() => {
       setNotice(null);
-    }, 750);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [notice]);
@@ -265,14 +274,34 @@ const App = () => {
         onKeyUp={(e) => updateCurrentGuess(e.key)}
       >
         <InnerContainer>
-          <Score found={found} notice={notice} />
-          <Letters />
+          <TopContainer>
+            <Score found={found} notice={notice} />
+            <Letters />
+            <Box
+              sx={(theme) => ({
+                [theme.breakpoints.up("md")]: {
+                  display: "none",
+                },
+              })}
+            >
+              <Notice found={found} notice={notice} />
+            </Box>
+          </TopContainer>
           <BottomContainer>
             <Guess found={found} guess={currentGuess} />
             <Words />
             <Keyboard submitKey={updateCurrentGuess} />
+            <Box
+              sx={(theme) => ({
+                height: "48px",
+                [theme.breakpoints.down("md")]: {
+                  display: "none",
+                },
+              })}
+            >
+              <Notice found={found} notice={notice} />
+            </Box>
           </BottomContainer>
-          <Notice found={found} notice={notice} />
         </InnerContainer>
       </AppContainer>
     </GameContext.Provider>

@@ -19,7 +19,7 @@ type TextProps = {
 
 const Text = styled(Typography)<TextProps>(({ theme, small }) => ({
   color: ColourScheme.GREEN,
-  fontSize: small ? "16px" : "100px",
+  fontSize: small ? "24px" : "100px",
   fontWeight: 700,
 }));
 

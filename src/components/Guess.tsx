@@ -64,13 +64,14 @@ export const Guess = ({ guess, found }: { guess: string; found: boolean }) => {
             "@keyframes woo": {
               to: {
                 backgroundColor: ColourScheme.GREEN,
+                borderColor: ColourScheme.GREEN,
               },
             },
             animation:
               found === false
                 ? "nope 0.5s infinite"
                 : found && letter !== " "
-                ? "woo 0.75s infinite"
+                ? "woo 1s infinite"
                 : "none",
             animationIterationCount: 1,
           }}
