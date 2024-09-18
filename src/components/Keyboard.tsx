@@ -6,7 +6,7 @@ import { QWERTY } from "../constants/constants";
 const firstRow = QWERTY[0].toLowerCase().split("");
 const secondRow = QWERTY[1].toLowerCase().split("");
 const thirdRow = QWERTY[2].toLowerCase().split("");
-const GAP = "7px";
+const GAP = "6px";
 
 const KeyboardStack = styled(Stack)(({ theme }) => ({
   "& .key:hover": {
@@ -66,7 +66,7 @@ export const Keyboard = ({
       </KeyRow>
       <KeyRow>
         <Key
-          sx={{ fontSize: "12px" }}
+          sx={{ fontSize: "12px", width: "150%" }}
           className="enter"
           onClick={() => submitKey("Enter")}
         >
@@ -79,7 +79,7 @@ export const Keyboard = ({
         ))}
 
         <Key
-          sx={{ fontSize: "12px" }}
+          sx={{ fontSize: "12px", width: "150%" }}
           className="backspace"
           onClick={() => submitKey("Backspace")}
         >

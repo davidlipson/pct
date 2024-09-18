@@ -13,7 +13,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/material";
 import { MAX_GUESS_LENGTH } from "./constants/constants";
-import { todaysLetters } from "./utils";
+import { isSubSequence, todaysLetters, totalMatchingWords } from "./utils";
 
 type Word = {
   word: string;
@@ -32,7 +32,7 @@ const AppContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   display: "flex",
-alignSelf: "center",
+  alignSelf: "center",
   alignItems: "center",
   [theme.breakpoints.down("md")]: {
     padding: "0px 24px",
@@ -101,6 +101,7 @@ const App = () => {
   const [found, setFound] = useState<boolean>(null);
   const [howToPlay, setHowToPlay] = useState<boolean>(false);
   const [height, setHeight] = useState(window.innerHeight);
+  const [totalMatching, setTotalMatching] = useState<number>(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -112,6 +113,10 @@ const App = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    setTotalMatching(totalMatchingWords(letters));
+  }, [letters]);
 
   useEffect(() => {
     try {
@@ -136,19 +141,6 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem(localStorageId, JSON.stringify({ words, letters }));
   }, [words]);
-
-  const isSubSequence = (word: string, m: number, n: number) => {
-    // Base Cases
-    if (m == 0) return true;
-    if (n == 0) return false;
-
-    // If last characters of two strings
-    // are matching
-    if (letters[m - 1] == word[n - 1]) return isSubSequence(word, m - 1, n - 1);
-
-    // If last characters are not matching
-    return isSubSequence(word, m, n - 1);
-  };
 
   const isRepeatWord = (word: string) => {
     // can't be a repeat word!
@@ -186,7 +178,7 @@ const App = () => {
     }
 
     // check if word has letters in order
-    const isSub = isSubSequence(word, letters.length, word.length);
+    const isSub = isSubSequence(letters, word, letters.length, word.length);
     return {
       status: isSub,
       notice: isSub ? "" : "Use today's letters in order!",
@@ -224,7 +216,7 @@ const App = () => {
   }, [ref]);
 
   const updateCurrentGuess = async (key: string) => {
-    if (found !== null) {
+    if (found) {
       setFound(null);
       setNotice(null);
       setCurrentGuess("");
@@ -276,15 +268,14 @@ const App = () => {
 
   return (
     <GameContext.Provider value={{ letters, submitWord, points, words }}>
-      <HowToPlay howToPlay={howToPlay} setHowToPlay={setHowToPlay} />
-      <Share setNotice={setNotice} />
-
       <AppContainer
         sx={{ height: `${height}px` }}
         tabIndex={0}
         ref={ref}
         onKeyUp={(e) => updateCurrentGuess(e.key)}
       >
+        <HowToPlay howToPlay={howToPlay} setHowToPlay={setHowToPlay} />
+        <Share setNotice={setNotice} />
         <InnerContainer>
           <TopContainer>
             <Score found={found} notice={notice} />
@@ -301,7 +292,7 @@ const App = () => {
           </TopContainer>
           <BottomContainer>
             <Guess found={found} guess={currentGuess} />
-            <Words />
+            <Words totalWords={totalMatching} />
             <Keyboard submitKey={updateCurrentGuess} />
             <Box
               sx={(theme) => ({
