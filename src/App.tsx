@@ -119,6 +119,7 @@ const App = () => {
 
   useEffect(() => {
     setTotalMatching(totalMatchingWords(letters));
+    document.title = `Today's Letters: ${letters.join(" ").toUpperCase()}`;
   }, [letters]);
 
   useEffect(() => {
