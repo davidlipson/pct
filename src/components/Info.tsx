@@ -50,7 +50,7 @@ export const Info = ({
 
           try {
             await navigator.share({
-              url: "https://pctgame.com",
+              url: "www.pctgame.com",
               text,
             });
             Sentry.captureEvent({
