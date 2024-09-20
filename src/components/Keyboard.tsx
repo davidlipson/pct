@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ColourScheme } from "../constants/colourScheme";
 import { QWERTY } from "../constants/constants";
@@ -27,15 +27,17 @@ const KeyRow = styled(Stack)(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const Key = styled(Box)(({ theme }) => ({
+const Key = styled(Stack)(({ theme }) => ({
   backgroundColor: ColourScheme.BLACK,
   color: ColourScheme.WHITE,
   borderRadius: "4px",
   fontSize: "16px",
   textAlign: "center",
+  justifyContent: "center",
   width: "100%",
   height: "50px",
   padding: "5px",
+  lineHeight: "50px",
   alignContent: "center",
   cursor: "pointer",
   ":hover": {

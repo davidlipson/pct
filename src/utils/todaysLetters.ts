@@ -20,7 +20,7 @@ export const todaysLetters = (): string[] => {
     ].toLowerCase();
   const thirdLetter =
     LETTERS[
-      (timeInToronto.year() * timeInToronto.month() + 2 + timeInToronto.day()) %
+      (timeInToronto.year() * timeInToronto.month() + 5 + timeInToronto.day()) %
         LETTERS.length
     ].toLowerCase();
   return [firstLetter, secondLetter, thirdLetter];

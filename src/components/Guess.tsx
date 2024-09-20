@@ -5,10 +5,11 @@ import { styled } from "@mui/material/styles";
 import { ColourScheme } from "../constants/colourScheme";
 import { MAX_GUESS_LENGTH } from "../constants/constants";
 
-const Letter = styled(Box)(({ theme }) => ({
+const Letter = styled(Stack)(({ theme }) => ({
   textAlign: "center",
   alignContent: "center",
   height: "100%",
+  justifyContent: "center",
   width: "60px",
   fontSize: "30px",
   border: `1.5px solid ${ColourScheme.GREY}`,
