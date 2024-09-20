@@ -4,5 +4,5 @@ export * from "./Words";
 export * from "./Keyboard";
 export * from "./Notice";
 export * from "./HowToPlay";
-export * from "./Share";
+export * from "./Info";
 export * from "./Score";

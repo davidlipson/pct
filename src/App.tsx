@@ -7,13 +7,18 @@ import {
   Letters,
   Notice,
   Score,
-  Share,
+  Info,
   Words,
 } from "./components";
 import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/material";
 import { MAX_GUESS_LENGTH } from "./constants/constants";
-import { isSubSequence, todaysLetters, totalMatchingWords } from "./utils";
+import {
+  calculatePoints,
+  isSubSequence,
+  todaysLetters,
+  totalMatchingWords,
+} from "./utils";
 
 type Word = {
   word: string;
@@ -50,12 +55,10 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
   alignItems: "center",
   height: "100%",
-  gap: "16px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
     justifyContent: "space-between",
     paddingTop: "48px",
-    gap: "8px",
   },
 }));
 
@@ -185,10 +188,6 @@ const App = () => {
     };
   };
 
-  const calculatePoints = (word: string): number => {
-    return word.length - 3;
-  };
-
   const submitWord = async (word: string): Promise<boolean> => {
     // check if word is valid
     const { status: isValid, notice } = await validateWord(word);
@@ -274,38 +273,43 @@ const App = () => {
         ref={ref}
         onKeyUp={(e) => updateCurrentGuess(e.key)}
       >
-        <HowToPlay howToPlay={howToPlay} setHowToPlay={setHowToPlay} />
-        <Share setNotice={setNotice} />
-        <InnerContainer>
-          <TopContainer>
-            <Score found={found} notice={notice} />
-            <Letters />
-            <Box
-              sx={(theme) => ({
-                [theme.breakpoints.up("md")]: {
-                  display: "none",
-                },
-              })}
-            >
-              <Notice found={found} notice={notice} />
-            </Box>
-          </TopContainer>
-          <BottomContainer>
-            <Guess found={found} guess={currentGuess} />
-            <Words totalWords={totalMatching} />
-            <Keyboard submitKey={updateCurrentGuess} />
-            <Box
-              sx={(theme) => ({
-                height: "48px",
-                [theme.breakpoints.down("md")]: {
-                  display: "none",
-                },
-              })}
-            >
-              <Notice found={found} notice={notice} />
-            </Box>
-          </BottomContainer>
-        </InnerContainer>
+        <Info howToPlay={howToPlay} setHowToPlay={setHowToPlay} />
+
+        {howToPlay ? (
+          <HowToPlay />
+        ) : (
+          <InnerContainer>
+            <TopContainer>
+              <Score found={found} notice={notice} />
+              <Letters />
+              <Box
+                sx={(theme) => ({
+                  [theme.breakpoints.up("md")]: {
+                    display: "none",
+                  },
+                })}
+              >
+                <Notice found={found} notice={notice} />
+              </Box>
+            </TopContainer>
+            <BottomContainer>
+              <Guess found={found} guess={currentGuess} />
+              <Words totalWords={totalMatching} />
+              <Keyboard submitKey={updateCurrentGuess} />
+              <Box
+                sx={(theme) => ({
+                  height: "48px",
+                  marginTop: "16px",
+                  [theme.breakpoints.down("md")]: {
+                    display: "none",
+                  },
+                })}
+              >
+                <Notice found={found} notice={notice} />
+              </Box>
+            </BottomContainer>
+          </InnerContainer>
+        )}
       </AppContainer>
     </GameContext.Provider>
   );

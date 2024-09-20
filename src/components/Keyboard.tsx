@@ -6,7 +6,6 @@ import { QWERTY } from "../constants/constants";
 const firstRow = QWERTY[0].toLowerCase().split("");
 const secondRow = QWERTY[1].toLowerCase().split("");
 const thirdRow = QWERTY[2].toLowerCase().split("");
-const GAP = "6px";
 
 const KeyboardStack = styled(Stack)(({ theme }) => ({
   "& .key:hover": {
@@ -15,7 +14,7 @@ const KeyboardStack = styled(Stack)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  gap: GAP,
+  gap: "8px",
   "& .key": {
     border: `1px solid ${ColourScheme.GREY}`,
   },
@@ -24,14 +23,15 @@ const KeyboardStack = styled(Stack)(({ theme }) => ({
 const KeyRow = styled(Stack)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  gap: GAP,
+  gap: "6px",
   justifyContent: "center",
 }));
 
 const Key = styled(Box)(({ theme }) => ({
-  backgroundColor: ColourScheme.GREY,
+  backgroundColor: ColourScheme.BLACK,
+  color: ColourScheme.WHITE,
   borderRadius: "4px",
-  fontSize: "20px",
+  fontSize: "16px",
   textAlign: "center",
   width: "100%",
   height: "50px",
@@ -41,6 +41,11 @@ const Key = styled(Box)(({ theme }) => ({
   ":hover": {
     opacity: 0.6,
   },
+}));
+
+const Space = styled(Box)(({ theme }) => ({
+  width: "50%",
+  height: "50px",
 }));
 
 export const Keyboard = ({
@@ -58,15 +63,17 @@ export const Keyboard = ({
         ))}
       </KeyRow>
       <KeyRow>
+        <Space />
         {secondRow.map((c) => (
           <Key key={c} onClick={() => submitKey(c)}>
             {c.toUpperCase()}
           </Key>
         ))}
+        <Space />
       </KeyRow>
       <KeyRow>
         <Key
-          sx={{ fontSize: "12px", width: "150%" }}
+          sx={{ fontSize: "10px", width: "150%" }}
           className="enter"
           onClick={() => submitKey("Enter")}
         >

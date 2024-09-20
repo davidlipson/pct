@@ -12,6 +12,7 @@ const Letter = styled(Box)(({ theme }) => ({
   width: "60px",
   fontSize: "30px",
   border: `1.5px solid ${ColourScheme.GREY}`,
+  backgroundColor: ColourScheme.WHITE,
   [theme.breakpoints.down("sm")]: {
     width: "100%",
     height: "40px",
@@ -24,13 +25,13 @@ const GuessStack = styled(Stack)(({ theme }) => ({
   display: "flex",
   height: "60px",
   width: "100%",
+  gap: "3px",
   justifyContent: "space-between",
   [theme.breakpoints.down("md")]: {
     width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
     height: "40px",
-    gap: "3px",
   },
 }));
 

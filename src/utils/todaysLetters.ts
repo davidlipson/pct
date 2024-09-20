@@ -11,16 +11,16 @@ export const todaysLetters = (): string[] => {
   const timeInToronto = dayjs().tz("America/Toronto");
   const firstLetter =
     LETTERS[
-      (timeInToronto.day() * timeInToronto.date() + 1) % LETTERS.length
+      (timeInToronto.day() * timeInToronto.date() + 2) % LETTERS.length
     ].toLowerCase();
   const secondLetter =
     LETTERS[
-      (timeInToronto.month() * timeInToronto.day() + 7 + timeInToronto.date()) %
+      (timeInToronto.month() * timeInToronto.day() + 1 + timeInToronto.date()) %
         LETTERS.length
     ].toLowerCase();
   const thirdLetter =
     LETTERS[
-      (timeInToronto.year() * timeInToronto.month() + 6 + timeInToronto.day()) %
+      (timeInToronto.year() * timeInToronto.month() + 2 + timeInToronto.day()) %
         LETTERS.length
     ].toLowerCase();
   return [firstLetter, secondLetter, thirdLetter];

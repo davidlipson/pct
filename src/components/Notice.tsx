@@ -22,7 +22,7 @@ export const Notice = ({
   notice: string;
   found: boolean;
 }) => {
-  if (notice && !found) {
+  if (notice) {
     return (
       <Container
         sx={{

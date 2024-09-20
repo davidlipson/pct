@@ -3,6 +3,7 @@ import { GameContext } from "../App";
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { LETTERS } from "../constants/constants";
+import { ColourScheme } from "../constants/colourScheme";
 
 const LetterContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "row",
@@ -57,11 +58,23 @@ export const Letters = () => {
           >
             {animate &&
               getRandomLetters().map((letter) => (
-                <Typography height="120px" width="75px" variant="h1">
+                <Typography
+                  color={ColourScheme.DARK_GREY}
+                  height="120px"
+                  width="75px"
+                  variant="h2"
+                  textAlign="center"
+                >
                   {letter.toUpperCase()}
                 </Typography>
               ))}
-            <Typography height="120px" width="75px" variant="h1">
+            <Typography
+              color={ColourScheme.BLACK}
+              height="120px"
+              width="75px"
+              variant="h2"
+              textAlign="center"
+            >
               {letter.toUpperCase()}
             </Typography>
           </Stack>
