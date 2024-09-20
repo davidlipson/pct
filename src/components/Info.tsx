@@ -56,6 +56,7 @@ export const Info = ({
             Sentry.captureEvent({
               message: "Share button clicked.",
               extra: { words, letters, points },
+              level: "info",
             });
           } catch (e) {
             console.error("Error sharing", e);
