@@ -3,7 +3,7 @@ import { GameContext } from "../../App";
 import { Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ColourScheme } from "../../constants/colourScheme";
-import { MAX_GUESS_LENGTH } from "../../constants/constants";
+import { MAX_LENGTH } from "../../constants";
 
 const Letter = styled(Stack)(({ theme }) => ({
   textAlign: "center",
@@ -38,7 +38,7 @@ const GuessStack = styled(Stack)(({ theme }) => ({
 
 export const Guess = ({ guess, found }: { guess: string; found: boolean }) => {
   const { letters } = useContext(GameContext);
-  const paddedGuess = guess.padEnd(MAX_GUESS_LENGTH, " ");
+  const paddedGuess = guess.padEnd(MAX_LENGTH, " ");
   return (
     <GuessStack direction="row">
       {paddedGuess.split("").map((letter, index) => (

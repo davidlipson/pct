@@ -31,24 +31,29 @@ export const Info = ({ view, setView }: { view: View; setView: any }) => {
       >
         {view === View.HOW_TO_PLAY ? <CancelIcon /> : <HelpIcon />}
       </Button>
-      <Button
-        key="leaderboard"
-        onClick={() =>
-          setView((prev) =>
-            prev === View.LEADERBOARD ? View.GAME : View.LEADERBOARD
-          )
-        }
-        sx={{
-          right: "60px",
-        }}
-      >
-        {view === View.LEADERBOARD ? <CancelIcon /> : <EmojiEventsIcon />}
-      </Button>
+      {false && (
+        <Button
+          key="leaderboard"
+          onClick={() =>
+            setView((prev) =>
+              prev === View.LEADERBOARD ? View.GAME : View.LEADERBOARD
+            )
+          }
+          sx={{
+            right: "60px",
+          }}
+        >
+          {view === View.LEADERBOARD ? <CancelIcon /> : <EmojiEventsIcon />}
+        </Button>
+      )}
       <Button
         key="share"
-        sx={{
-          right: "100px",
-        }}
+        sx={(theme) => ({
+          right: "60px",
+          [theme.breakpoints.down("sm")]: {
+            left: "20px",
+          },
+        })}
         onClick={async () => {
           let firstLine = `I'm playing PCT!`;
           if (points > 0) {

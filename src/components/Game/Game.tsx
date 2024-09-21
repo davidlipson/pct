@@ -12,13 +12,14 @@ import {
 } from ".";
 import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/material";
-import { MAX_GUESS_LENGTH } from "../../constants/constants";
 import {
   calculatePoints,
   isSubSequence,
+  remainingWordsByLength,
   totalMatchingWords,
 } from "../../utils";
 import { GameContext } from "../../App";
+import { MAX_LENGTH, MIN_LENGTH } from "../../constants";
 
 export enum View {
   GAME = "GAME",
@@ -87,6 +88,7 @@ export const Game = () => {
   const [view, setView] = useState<View>(View.GAME);
   const [height, setHeight] = useState(window.innerHeight);
   const [totalMatching, setTotalMatching] = useState<number>(0);
+  const [totalRemainingWords, setTotalRemainingWords] = useState<number[]>([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -102,6 +104,15 @@ export const Game = () => {
   useEffect(() => {
     setTotalMatching(totalMatchingWords(letters));
   }, [letters]);
+
+  useEffect(() => {
+    setTotalRemainingWords(remainingWordsByLength(letters, words));
+    // check if we got all of a length and send a woo!
+  }, [words]);
+
+  useEffect(() => {
+    console.log("test");
+  }, [totalRemainingWords]);
 
   const isRepeatWord = (word: string) => {
     // can't be a repeat word!
@@ -176,7 +187,7 @@ export const Game = () => {
       setCurrentGuess("");
     }
     if (key === "Enter") {
-      if (currentGuess.length >= 3) {
+      if (currentGuess.length > MIN_LENGTH) {
         await submitWord(currentGuess);
       } else {
         setNotice("Word must be at least 3 characters long!");
@@ -187,7 +198,7 @@ export const Game = () => {
     } else if (
       key.length === 1 &&
       key.match(/[a-z]/i) &&
-      currentGuess.length < MAX_GUESS_LENGTH
+      currentGuess.length < MAX_LENGTH
     ) {
       setCurrentGuess((prev) => prev + key.toLowerCase());
     }

@@ -4,7 +4,7 @@ import { Game } from "./components/Game";
 import { todaysLetters } from "./utils";
 import { Login } from "./components";
 
-interface Word {
+export interface Word {
   word: string;
   points: number;
 }
@@ -51,11 +51,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (!username) {
+    /*if (!username) {
       document.title = `P C T`;
-    } else {
-      document.title = `Today's Letters: ${letters.join(" ").toUpperCase()}`;
-    }
+    } else {*/
+    document.title = `Today's Letters: ${letters.join(" ").toUpperCase()}`;
+    //}
   }, [letters, username]);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const App = () => {
     <GameContext.Provider
       value={{ points, letters, words, username, addWord, updateUsername }}
     >
-      {validUsername(username) ? <Game /> : <Login />}
+      {true || validUsername(username) ? <Game /> : <Login />}
     </GameContext.Provider>
   );
 };
