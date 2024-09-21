@@ -11,6 +11,8 @@ export const totalMatchingWords = (
   return ALL_WORDS.filter((word) => {
     return (
       isSubSequence(letters, word, letters.length, word.length) &&
+      word.length >= MIN_LENGTH &&
+      word.length <= MAX_LENGTH &&
       (length ? word.length === length : true) &&
       (excludedWords ? !excludedWords.find((ew) => ew.word === word) : true)
     );
@@ -21,7 +23,6 @@ export const remainingWordsByLength = (
   letters: string[],
   words: Word[]
 ): number[] => {
-  // between MIN_LENGTH and MAX_LENGTH
   const lengths = Array.from(
     { length: MAX_LENGTH - MIN_LENGTH + 1 },
     (_, i) => i + MIN_LENGTH

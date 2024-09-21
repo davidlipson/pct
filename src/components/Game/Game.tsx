@@ -15,11 +15,11 @@ import { Box, Stack } from "@mui/material";
 import {
   calculatePoints,
   isSubSequence,
-  remainingWordsByLength,
   totalMatchingWords,
 } from "../../utils";
 import { GameContext } from "../../App";
 import { MAX_LENGTH, MIN_LENGTH } from "../../constants";
+import { ALL_WORDS } from "../../constants/dictionary";
 
 export enum View {
   GAME = "GAME",
@@ -84,11 +84,10 @@ export const Game = () => {
   const { words, letters, addWord } = useContext(GameContext);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [notice, setNotice] = useState<string>(null);
-  const [found, setFound] = useState<boolean>(null);
+  const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
   const [height, setHeight] = useState(window.innerHeight);
-  const [totalMatching, setTotalMatching] = useState<number>(0);
-  const [totalRemainingWords, setTotalRemainingWords] = useState<number[]>([]);
+  const [totalWords, setTotalWords] = useState<number>(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -102,17 +101,8 @@ export const Game = () => {
   }, []);
 
   useEffect(() => {
-    setTotalMatching(totalMatchingWords(letters));
+    setTotalWords(totalMatchingWords(letters));
   }, [letters]);
-
-  useEffect(() => {
-    setTotalRemainingWords(remainingWordsByLength(letters, words));
-    // check if we got all of a length and send a woo!
-  }, [words]);
-
-  useEffect(() => {
-    console.log("test");
-  }, [totalRemainingWords]);
 
   const isRepeatWord = (word: string) => {
     // can't be a repeat word!
@@ -126,6 +116,13 @@ export const Game = () => {
   const validateWord = async (
     word: string
   ): Promise<{ status: boolean; notice: string }> => {
+    if (word.length < MIN_LENGTH) {
+      return {
+        status: false,
+        notice: `Word must be at least ${MIN_LENGTH} characters long!`,
+      };
+    }
+
     if (isRepeatWord(word)) {
       return {
         status: false,
@@ -133,16 +130,15 @@ export const Game = () => {
       };
     }
 
-    // def a better way than this...
-    // populate a list of correct answers over night?...
-    const result = await fetch(
+    /*const result = await fetch(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
       {
         method: "GET",
       }
-    );
+    );*/
 
-    if (result.status !== 200) {
+    // if (result.status !== 200) {
+    if (!ALL_WORDS.includes(word)) {
       return {
         status: false,
         notice: "Not a word!",
@@ -164,14 +160,14 @@ export const Game = () => {
     // if invalid return early
     if (!isValid) {
       setNotice(notice);
-      setFound(false);
+      setFound(0);
       return false;
     }
 
     // if valid, calculate points and update add points to total
-    setFound(true);
     const points = calculatePoints(word);
-    setNotice(`+${points}`);
+    setFound(points);
+    setNotice(null);
     addWord(word, points);
     return true;
   };
@@ -181,18 +177,13 @@ export const Game = () => {
   }, [ref]);
 
   const updateCurrentGuess = async (key: string) => {
-    if (found) {
+    if (found > 0) {
       setFound(null);
       setNotice(null);
       setCurrentGuess("");
     }
     if (key === "Enter") {
-      if (currentGuess.length > MIN_LENGTH) {
-        await submitWord(currentGuess);
-      } else {
-        setNotice("Word must be at least 3 characters long!");
-        setFound(false);
-      }
+      await submitWord(currentGuess);
     } else if (key === "Backspace") {
       setCurrentGuess((prev) => prev.slice(0, prev.length - 1));
     } else if (
@@ -211,7 +202,7 @@ export const Game = () => {
 
     const timer = setTimeout(() => {
       setFound(null);
-      if (found) {
+      if (found > 0) {
         setCurrentGuess("");
       }
     }, 1000);
@@ -245,7 +236,7 @@ export const Game = () => {
       {view === View.GAME && (
         <InnerContainer>
           <TopContainer>
-            <Score found={found} notice={notice} />
+            <Score found={found} />
             <Letters />
             <Box
               sx={(theme) => ({
@@ -254,12 +245,12 @@ export const Game = () => {
                 },
               })}
             >
-              <Notice found={found} notice={notice} />
+              <Notice notice={notice} />
             </Box>
           </TopContainer>
           <BottomContainer>
             <Guess found={found} guess={currentGuess} />
-            <Words totalWords={totalMatching} />
+            <Words totalWords={totalWords} />
             <Keyboard submitKey={updateCurrentGuess} />
             <Box
               sx={(theme) => ({
@@ -270,7 +261,7 @@ export const Game = () => {
                 },
               })}
             >
-              <Notice found={found} notice={notice} />
+              <Notice notice={notice} />
             </Box>
           </BottomContainer>
         </InnerContainer>

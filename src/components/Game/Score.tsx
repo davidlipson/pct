@@ -23,19 +23,13 @@ const Text = styled(Typography)<TextProps>(({ theme, small }) => ({
   fontWeight: 700,
 }));
 
-export const Score = ({
-  notice,
-  found,
-}: {
-  notice: string;
-  found: boolean;
-}) => {
+export const Score = ({ found }: { found: number }) => {
   const { points } = useContext(GameContext);
   return (
     <Container>
       <Text>{points}</Text>
 
-      {found && notice && (
+      {found > 0 && (
         <Box
           sx={{
             "@keyframes nice": {
@@ -50,7 +44,7 @@ export const Score = ({
             animationIterationCount: 1,
           }}
         >
-          <Text small>{notice}</Text>
+          <Text small>+ {found}</Text>
         </Box>
       )}
     </Container>

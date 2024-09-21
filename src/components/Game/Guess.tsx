@@ -36,16 +36,22 @@ const GuessStack = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export const Guess = ({ guess, found }: { guess: string; found: boolean }) => {
+export const Guess = ({ guess, found }: { guess: string; found: number }) => {
   const { letters } = useContext(GameContext);
   const paddedGuess = guess.padEnd(MAX_LENGTH, " ");
+
+  const colour = () => {
+    return ColourScheme.GREEN;
+  };
+
   return (
     <GuessStack direction="row">
       {paddedGuess.split("").map((letter, index) => (
         <Letter
           sx={{
             borderColor:
-              letters.includes(letter) && `${ColourScheme.GREEN} !important`,
+              letters.includes(letter) &&
+              `${found > 0 ? colour() : ColourScheme.GREEN} !important`,
             "@keyframes nope": {
               "0%": {
                 transform: "translateX(0)",
@@ -65,15 +71,15 @@ export const Guess = ({ guess, found }: { guess: string; found: boolean }) => {
             },
             "@keyframes woo": {
               to: {
-                backgroundColor: ColourScheme.GREEN,
-                borderColor: ColourScheme.GREEN,
+                backgroundColor: colour(),
+                borderColor: colour(),
               },
             },
             animation:
-              found === false
+              found === 0
                 ? "nope 0.5s infinite"
-                : found && letter !== " "
-                ? "woo 1s infinite"
+                : found > 0 && letter !== " "
+                ? `woo 1s infinite`
                 : "none",
             animationIterationCount: 1,
           }}

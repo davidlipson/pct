@@ -1,8 +1,9 @@
 import { useEffect, useState, createContext } from "react";
 import "./App.css";
 import { Game } from "./components/Game";
-import { todaysLetters } from "./utils";
+import { remainingWordsByLength, todaysLetters } from "./utils";
 import { Login } from "./components";
+import { MIN_LENGTH } from "./constants";
 
 export interface Word {
   word: string;
@@ -51,12 +52,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    /*if (!username) {
-      document.title = `P C T`;
-    } else {*/
     document.title = `Today's Letters: ${letters.join(" ").toUpperCase()}`;
-    //}
-  }, [letters, username]);
+  }, [letters]);
 
   useEffect(() => {
     try {
@@ -97,7 +94,14 @@ const App = () => {
 
   return (
     <GameContext.Provider
-      value={{ points, letters, words, username, addWord, updateUsername }}
+      value={{
+        points,
+        letters,
+        words,
+        username,
+        addWord,
+        updateUsername,
+      }}
     >
       {true || validUsername(username) ? <Game /> : <Login />}
     </GameContext.Provider>

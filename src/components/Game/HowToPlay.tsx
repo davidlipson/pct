@@ -83,8 +83,7 @@ export const HowToPlay = () => {
             found in order.
           </DirectionText>
           <DirectionText>
-            Each word will receive points based on their length, minus the three
-            letters provided. Words must be greater than three letters long.
+            Words must be at least three letters long. Additional points will be rewarded for each additional letter.
           </DirectionText>
           <DirectionText>
             For example,{" "}

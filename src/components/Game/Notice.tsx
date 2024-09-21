@@ -15,14 +15,8 @@ const Text = styled(Typography)(() => ({
   fontWeight: 700,
 }));
 
-export const Notice = ({
-  notice,
-  found,
-}: {
-  notice: string;
-  found: boolean;
-}) => {
-  if (notice && !found) {
+export const Notice = ({ notice }: { notice: string }) => {
+  if (notice) {
     return (
       <Container
         sx={{
@@ -43,7 +37,7 @@ export const Notice = ({
               transform: "translateX(0)",
             },
           },
-          animation: found === false ? "jolt 0.5s infinite" : "none",
+          animation: "jolt 0.5s infinite",
           animationIterationCount: 1,
         }}
       >
