@@ -19,7 +19,6 @@ import {
 } from "../../utils";
 import { GameContext } from "../../App";
 import { MAX_LENGTH, MIN_LENGTH } from "../../constants";
-import { ALL_WORDS } from "../../constants/dictionary";
 
 export enum View {
   GAME = "GAME",
@@ -87,7 +86,7 @@ export const Game = () => {
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
   const [height, setHeight] = useState(window.innerHeight);
-  const [totalWords, setTotalWords] = useState<number>(0);
+  //const [totalWords, setTotalWords] = useState<number>(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -100,9 +99,11 @@ export const Game = () => {
     };
   }, []);
 
+  /*
   useEffect(() => {
     setTotalWords(totalMatchingWords(letters));
   }, [letters]);
+  */
 
   const isRepeatWord = (word: string) => {
     // can't be a repeat word!
@@ -130,15 +131,15 @@ export const Game = () => {
       };
     }
 
-    /*const result = await fetch(
+    const result = await fetch(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
       {
         method: "GET",
       }
-    );*/
+    );
 
-    // if (result.status !== 200) {
-    if (!ALL_WORDS.includes(word)) {
+    if (result.status !== 200) {
+      //if (!ALL_WORDS.includes(word)) {
       return {
         status: false,
         notice: "Not a word!",
@@ -224,7 +225,7 @@ export const Game = () => {
 
   return (
     <AppContainer
-      sx={{ height: `${height}px` }}
+      sx={{ height: `${height}px`, border: "none" }}
       tabIndex={0}
       ref={ref}
       onKeyUp={(e) => updateCurrentGuess(e.key)}
@@ -250,7 +251,7 @@ export const Game = () => {
           </TopContainer>
           <BottomContainer>
             <Guess found={found} guess={currentGuess} />
-            <Words totalWords={totalWords} />
+            <Words /*totalWords={totalWords}*/ />
             <Keyboard submitKey={updateCurrentGuess} />
             <Box
               sx={(theme) => ({

@@ -24,8 +24,14 @@ const Entry = styled(Stack)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export const Words = ({ totalWords }: { totalWords: number }) => {
+export const Words = (/*{ totalWords }: { totalWords: number }*/) => {
   const { words } = useContext(GameContext);
+  /*const text = words.length
+    ? totalWords > 0
+      ? `${words.length} / ${totalWords} words found`
+      : "Your words"
+    : "No words found";*/
+  const text = words.length ? `${words.length} words found` : "No words found";
   return (
     <Box width="100%">
       <Accordion
@@ -41,13 +47,7 @@ export const Words = ({ totalWords }: { totalWords: number }) => {
           id="panel1-header"
           disabled={words.length === 0}
         >
-          <Typography color={ColourScheme.DARK_GREY}>
-            {words.length
-              ? totalWords > 0
-                ? `${words.length} / ${totalWords} words found`
-                : "Your words"
-              : "No words found"}
-          </Typography>
+          <Typography color={ColourScheme.DARK_GREY}>{text}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <WordStack width={1} direction="column" spacing={3}>

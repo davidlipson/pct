@@ -1,9 +1,8 @@
 import { useEffect, useState, createContext } from "react";
 import "./App.css";
 import { Game } from "./components/Game";
-import { remainingWordsByLength, todaysLetters } from "./utils";
+import { todaysLetters } from "./utils";
 import { Login } from "./components";
-import { MIN_LENGTH } from "./constants";
 
 export interface Word {
   word: string;
