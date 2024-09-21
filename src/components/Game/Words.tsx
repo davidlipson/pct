@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GameContext } from "../App";
+import { GameContext } from "../../App";
 import { styled } from "@mui/material/styles";
 import {
   Accordion,
@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ColourScheme } from "../constants/colourScheme";
+import { ColourScheme } from "../../constants/colourScheme";
 
 const WordStack = styled(Stack)(({ theme }) => ({
   maxHeight: "300px",

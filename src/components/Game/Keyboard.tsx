@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ColourScheme } from "../constants/colourScheme";
-import { QWERTY } from "../constants/constants";
+import { ColourScheme } from "../../constants/colourScheme";
+import { QWERTY } from "../../constants/constants";
 
 const firstRow = QWERTY[0].toLowerCase().split("");
 const secondRow = QWERTY[1].toLowerCase().split("");

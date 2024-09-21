@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { ColourScheme } from "../constants/colourScheme";
+import { ColourScheme } from "../../constants/colourScheme";
 import { useContext } from "react";
-import { GameContext } from "../App";
+import { GameContext } from "../../App";
 import { styled } from "@mui/material/styles";
 
 const Container = styled(Stack)(({ theme }) => ({

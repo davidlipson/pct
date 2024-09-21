@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { GameContext } from "../App";
+import { GameContext } from "../../App";
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { LETTERS } from "../constants/constants";
-import { ColourScheme } from "../constants/colourScheme";
+import { LETTERS } from "../../constants/constants";
+import { ColourScheme } from "../../constants/colourScheme";
 
 const LetterContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "row",

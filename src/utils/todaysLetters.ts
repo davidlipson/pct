@@ -11,7 +11,7 @@ export const todaysLetters = (): string[] => {
   const timeInToronto = dayjs().tz("America/Toronto");
   const firstLetter =
     LETTERS[
-      (timeInToronto.day() * timeInToronto.date() + 2) % LETTERS.length
+      (timeInToronto.day() * timeInToronto.date() + 3) % LETTERS.length
     ].toLowerCase();
   const secondLetter =
     LETTERS[

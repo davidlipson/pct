@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { GameContext } from "../App";
-import { Box, Stack } from "@mui/material";
+import { GameContext } from "../../App";
+import { Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ColourScheme } from "../constants/colourScheme";
-import { MAX_GUESS_LENGTH } from "../constants/constants";
+import { ColourScheme } from "../../constants/colourScheme";
+import { MAX_GUESS_LENGTH } from "../../constants/constants";
 
 const Letter = styled(Stack)(({ theme }) => ({
   textAlign: "center",

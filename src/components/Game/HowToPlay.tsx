@@ -2,13 +2,13 @@ import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useContext } from "react";
-import { GameContext } from "../App";
+import { GameContext } from "../../App";
 import {
   calculatePoints,
   firstMatchingWord,
   wordWithLettersNotInOrder,
-} from "../utils";
-import { ColourScheme } from "../constants/colourScheme";
+} from "../../utils";
+import { ColourScheme } from "../../constants/colourScheme";
 
 const Container = styled(Stack)(({ theme }) => ({
   backgroundColor: "white",
