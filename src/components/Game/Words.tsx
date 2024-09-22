@@ -24,14 +24,10 @@ const Entry = styled(Stack)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export const Words = (/*{ totalWords }: { totalWords: number }*/) => {
+export const Words = ({ totalWords }: { totalWords: number }) => {
   const { words } = useContext(GameContext);
-  /*const text = words.length
-    ? totalWords > 0
-      ? `${words.length} / ${totalWords} words found`
-      : "Your words"
-    : "No words found";*/
-  const text = words.length ? `${words.length} words found` : "No words found";
+  const text = `${words.length} / ${totalWords} words found`;
+  //const text = words.length ? `${words.length} words found` : "No words found";
   return (
     <Box width="100%">
       <Accordion
