@@ -224,7 +224,7 @@ export const Game = () => {
 
   return (
     <AppContainer
-      sx={{ height: `${height}px`, border: "none" }}
+      sx={{ height: `${height}px`, outline: "none" }}
       tabIndex={0}
       ref={ref}
       onKeyUp={(e) => updateCurrentGuess(e.key)}

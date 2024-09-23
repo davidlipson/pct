@@ -50,9 +50,6 @@ export const Info = ({ view, setView }: { view: View; setView: any }) => {
         key="share"
         sx={(theme) => ({
           right: "60px",
-          [theme.breakpoints.down("sm")]: {
-            left: "20px",
-          },
         })}
         onClick={async () => {
           let firstLine = `I'm playing PCT!`;
