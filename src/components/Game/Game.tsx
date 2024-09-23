@@ -19,7 +19,7 @@ import {
 } from "../../utils";
 import { GameContext } from "../../App";
 import { MAX_LENGTH, MIN_LENGTH } from "../../constants";
-import { ALL_WORDS } from "../../constants/dictionary";
+import { ALL_WORDS } from "../../constants";
 
 export enum View {
   GAME = "GAME",
