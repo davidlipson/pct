@@ -20,6 +20,7 @@ const Container = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     padding: "48px 48px",
     height: "100%",
+    boxShadow: "none",
   },
 }));
 
@@ -83,7 +84,8 @@ export const HowToPlay = () => {
             found in order.
           </DirectionText>
           <DirectionText>
-            Words must be at least three letters long. Additional points will be rewarded for each additional letter.
+            Words must be at least three letters long. Additional points will be
+            rewarded for each additional letter.
           </DirectionText>
           <DirectionText>
             For example,{" "}

@@ -12,8 +12,8 @@ import { View } from "./Game";
 const Button = styled(Box)(({ theme }) => ({
   zIndex: 10,
   position: "absolute",
-  top: "20px",
-  right: "20px",
+  top: "30px",
+  right: "40px",
   cursor: "pointer",
 }));
 
@@ -40,7 +40,7 @@ export const Info = ({ view, setView }: { view: View; setView: any }) => {
             )
           }
           sx={{
-            right: "60px",
+            right: "120px",
           }}
         >
           {view === View.LEADERBOARD ? <CancelIcon /> : <EmojiEventsIcon />}
@@ -49,14 +49,18 @@ export const Info = ({ view, setView }: { view: View; setView: any }) => {
       <Button
         key="share"
         sx={(theme) => ({
-          right: "60px",
+          right: "80px",
         })}
         onClick={async () => {
           let firstLine = `I'm playing PCT!`;
           if (points > 0) {
-            firstLine = `Check out my words for ${letters
+            const sortedWords = words
+              .sort((a, b) => b.word.length - a.word.length)
+              .slice(0, 3);
+
+            firstLine = `Check out my top words for ${letters
               .map((letter) => letter.toUpperCase())
-              .join(".")}:\n(Total points: ${points})\n\n${words
+              .join(".")}:\n(Total points: ${points})\n\n${sortedWords
               .map((word) => word.word[0].toUpperCase() + word.word.slice(1))
               .join("\n")}`;
           }

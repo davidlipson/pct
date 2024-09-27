@@ -33,7 +33,7 @@ export const Letters = () => {
   return (
     <LetterContainer>
       {letters.map((letter, index) => (
-        <Box overflow="hidden" height="120px" width="75px">
+        <Box overflow="hidden" height="75px" width="75px">
           <Stack
             sx={{
               animation: animate
@@ -46,7 +46,7 @@ export const Letters = () => {
                   transform: "translateY(0)",
                 },
                 "100%": {
-                  transform: "translateY(-1200px)",
+                  transform: "translateY(-750px)",
                 },
               },
               animationIterationCount: 1,
@@ -60,7 +60,7 @@ export const Letters = () => {
               getRandomLetters().map((letter) => (
                 <Typography
                   color={ColourScheme.DARK_GREY}
-                  height="120px"
+                  height="75px"
                   width="75px"
                   variant="h2"
                   textAlign="center"
@@ -70,7 +70,7 @@ export const Letters = () => {
               ))}
             <Typography
               color={ColourScheme.BLACK}
-              height="120px"
+              height="75px"
               width="75px"
               variant="h2"
               textAlign="center"

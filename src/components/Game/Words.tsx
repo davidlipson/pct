@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ColourScheme } from "../../constants/colourScheme";
+import { LEVEL_TEXT, LEVELS } from "../../constants";
 
 const WordStack = styled(Stack)(({ theme }) => ({
   maxHeight: "300px",
@@ -27,7 +28,6 @@ const Entry = styled(Stack)(({ theme }) => ({
 export const Words = ({ totalWords }: { totalWords: number }) => {
   const { words } = useContext(GameContext);
   const text = `${words.length} / ${totalWords} words found`;
-  //const text = words.length ? `${words.length} words found` : "No words found";
   return (
     <Box width="100%">
       <Accordion

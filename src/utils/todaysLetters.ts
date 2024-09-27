@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { LETTERS } from "../constants/constants";
+import { GENIUS, LETTERS, MIN_WORDS } from "../constants/constants";
+import { totalMatchingWords } from "./totalMatchingWords";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -13,19 +14,40 @@ export const todaysLetters = (): string[] => {
   if (timeInToronto.month() === 8 && timeInToronto.date() === 29) {
     return ["p", "c", "t"];
   }
-  const firstLetter =
-    LETTERS[
-      (timeInToronto.day() * timeInToronto.date() + 3) % LETTERS.length
-    ].toLowerCase();
-  const secondLetter =
-    LETTERS[
-      (timeInToronto.month() * timeInToronto.day() + 1 + timeInToronto.date()) %
-        LETTERS.length
-    ].toLowerCase();
-  const thirdLetter =
-    LETTERS[
-      (timeInToronto.year() * timeInToronto.month() + 5 + timeInToronto.day()) %
-        LETTERS.length
-    ].toLowerCase();
-  return [firstLetter, secondLetter, thirdLetter];
+
+  let iterOne = 0;
+  let iterTwo = 0;
+  let iterThree = 0;
+
+  while (true) {
+    const firstLetter =
+      LETTERS[
+        (timeInToronto.day() * timeInToronto.date() + iterOne) % LETTERS.length
+      ].toLowerCase();
+    const secondLetter =
+      LETTERS[
+        (timeInToronto.month() * timeInToronto.day() +
+          iterTwo +
+          timeInToronto.date()) %
+          LETTERS.length
+      ].toLowerCase();
+    const thirdLetter =
+      LETTERS[
+        (timeInToronto.year() * timeInToronto.month() +
+          iterThree +
+          timeInToronto.day()) %
+          LETTERS.length
+      ].toLowerCase();
+    const totalWords = totalMatchingWords([
+      firstLetter,
+      secondLetter,
+      thirdLetter,
+    ]);
+    if (totalWords >= MIN_WORDS) {
+      return [firstLetter, secondLetter, thirdLetter];
+    }
+    iterOne++;
+    iterTwo++;
+    iterThree++;
+  }
 };

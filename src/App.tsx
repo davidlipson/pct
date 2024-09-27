@@ -3,6 +3,7 @@ import "./App.css";
 import { Game } from "./components/Game";
 import { todaysLetters } from "./utils";
 import { Login } from "./components";
+import { LEVELS } from "./constants";
 
 export interface Word {
   word: string;
@@ -19,6 +20,7 @@ interface GameContextType extends StoredValues {
   points: number;
   addWord: (word: string, points: number) => void;
   updateUsername: (name: string) => void;
+  currentLevel: number;
 }
 
 export const GameContext = createContext<GameContextType>(
@@ -48,6 +50,16 @@ const App = () => {
         JSON.stringify({ words, letters, username: name })
       );
     }
+  };
+
+  const getCurrentLevel = (points: number): number => {
+    let current = 0;
+    for (let i = 0; i < LEVELS.length; i++) {
+      if (points >= LEVELS[i]) {
+        current = i;
+      }
+    }
+    return current;
   };
 
   useEffect(() => {
@@ -90,7 +102,7 @@ const App = () => {
   }, [words]);
 
   const points = words.reduce((acc, curr) => acc + curr.points, 0);
-
+  const currentLevel = getCurrentLevel(points);
   return (
     <GameContext.Provider
       value={{
@@ -100,6 +112,7 @@ const App = () => {
         username,
         addWord,
         updateUsername,
+        currentLevel,
       }}
     >
       {true || validUsername(username) ? <Game /> : <Login />}

@@ -29,6 +29,7 @@ export enum View {
 
 const AppContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
+  height: "100%",
   flexDirection: "column",
   justifyContent: "center",
   display: "flex",
@@ -49,6 +50,7 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   display: "flex",
   alignSelf: "center",
   alignItems: "center",
+  marginTop: "48px",
   height: "100%",
   [theme.breakpoints.down("md")]: {
     width: "100%",
@@ -224,6 +226,7 @@ export const Game = () => {
 
   return (
     <AppContainer
+      boxSizing="border-box"
       sx={{ height: `${height}px`, outline: "none" }}
       tabIndex={0}
       ref={ref}
@@ -234,9 +237,8 @@ export const Game = () => {
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
-        <InnerContainer>
+        <InnerContainer spacing={8} direction="column">
           <TopContainer>
-            <Score found={found} />
             <Letters />
             <Box
               sx={(theme) => ({
@@ -248,14 +250,16 @@ export const Game = () => {
               <Notice notice={notice} />
             </Box>
           </TopContainer>
+          <Score found={found} />
           <BottomContainer>
-            <Guess found={found} guess={currentGuess} />
+            <Stack spacing={0.75}>
+              <Guess found={found} guess={currentGuess} />
+            </Stack>
             <Words totalWords={totalWords} />
             <Keyboard submitKey={updateCurrentGuess} />
             <Box
               sx={(theme) => ({
                 height: "48px",
-                marginTop: "16px",
                 [theme.breakpoints.down("md")]: {
                   display: "none",
                 },
