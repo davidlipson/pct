@@ -95,6 +95,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    if (words.length === 0) {
+      return;
+    }
     localStorage.setItem(
       localStorageId,
       JSON.stringify({ words, letters, username })
