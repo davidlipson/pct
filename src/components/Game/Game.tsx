@@ -53,7 +53,6 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   height: "100%",
   [theme.breakpoints.down("md")]: {
     width: "100%",
-    justifyContent: "space-between",
   },
 }));
 
@@ -61,10 +60,7 @@ const TopContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  gap: "16px",
-  [theme.breakpoints.down("sm")]: {
-    gap: "8px",
-  },
+  [theme.breakpoints.down("sm")]: {},
 }));
 
 const BottomContainer = styled(Stack)(({ theme }) => ({
@@ -222,7 +218,7 @@ export const Game = () => {
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
-        <InnerContainer spacing={4} direction="column">
+        <InnerContainer direction="column">
           <TopContainer>
             <Score found={found} />
             <Letters />
