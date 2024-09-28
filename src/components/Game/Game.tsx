@@ -29,7 +29,7 @@ export enum View {
 
 const AppContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
-  height: "100%",
+  height: "100vh",
   flexDirection: "column",
   justifyContent: "center",
   display: "flex",
