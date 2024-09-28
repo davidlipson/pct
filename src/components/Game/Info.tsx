@@ -12,7 +12,7 @@ import { View } from "./Game";
 const Button = styled(Box)(({ theme }) => ({
   zIndex: 10,
   position: "absolute",
-  top: "15px",
+  top: "20px",
   right: "40px",
   cursor: "pointer",
 }));
