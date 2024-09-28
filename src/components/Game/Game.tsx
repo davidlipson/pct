@@ -29,7 +29,6 @@ export enum View {
 
 const AppContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
-  height: "100vh",
   flexDirection: "column",
   justifyContent: "center",
   display: "flex",
@@ -53,6 +52,8 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   height: "100%",
   [theme.breakpoints.down("md")]: {
     width: "100%",
+    justifyContent: "end",
+    paddingTop: "48px",
   },
 }));
 
@@ -60,7 +61,10 @@ const TopContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  [theme.breakpoints.down("sm")]: {},
+  gap: "16px",
+  [theme.breakpoints.down("sm")]: {
+    gap: "8px",
+  },
 }));
 
 const BottomContainer = styled(Stack)(({ theme }) => ({
@@ -82,7 +86,19 @@ export const Game = () => {
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
+  const [height, setHeight] = useState(window.innerHeight);
   const [totalWords, setTotalWords] = useState<number>(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setHeight(window.innerHeight);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     setTotalWords(totalMatchingWords(letters));
@@ -209,6 +225,7 @@ export const Game = () => {
   return (
     <AppContainer
       boxSizing="border-box"
+      sx={{ height: `${height}px`, outline: "none" }}
       tabIndex={0}
       ref={ref}
       onKeyUp={(e) => updateCurrentGuess(e.key)}
@@ -218,9 +235,10 @@ export const Game = () => {
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
-        <InnerContainer direction="column">
+        <InnerContainer spacing={8} direction="column">
           <TopContainer>
             <Score found={found} />
+
             <Letters />
             <Box
               sx={(theme) => ({
