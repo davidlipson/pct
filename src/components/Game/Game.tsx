@@ -52,6 +52,7 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   gap: "48px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
+    gap: "16px",
     justifyContent: "space-between",
     paddingTop: "48px",
   },
