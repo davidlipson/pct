@@ -1,5 +1,4 @@
 import { useEffect, useState, createContext } from "react";
-import "./App.css";
 import { Game } from "./components/Game";
 import { todaysLetters } from "./utils";
 import { Login } from "./components";

@@ -55,7 +55,6 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     width: "100%",
     justifyContent: "space-between",
-    paddingTop: "48px",
   },
 }));
 
@@ -88,19 +87,7 @@ export const Game = () => {
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
-  const [height, setHeight] = useState(window.innerHeight);
   const [totalWords, setTotalWords] = useState<number>(0);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setHeight(window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     setTotalWords(totalMatchingWords(letters));
@@ -227,7 +214,6 @@ export const Game = () => {
   return (
     <AppContainer
       boxSizing="border-box"
-      sx={{ height: `${height}px`, outline: "none" }}
       tabIndex={0}
       ref={ref}
       onKeyUp={(e) => updateCurrentGuess(e.key)}

@@ -12,7 +12,7 @@ import { View } from "./Game";
 const Button = styled(Box)(({ theme }) => ({
   zIndex: 10,
   position: "absolute",
-  top: "30px",
+  top: "15px",
   right: "40px",
   cursor: "pointer",
 }));
@@ -50,6 +50,9 @@ export const Info = ({ view, setView }: { view: View; setView: any }) => {
         key="share"
         sx={(theme) => ({
           right: "80px",
+          [theme.breakpoints.down("md")]: {
+            left: "40px",
+          },
         })}
         onClick={async () => {
           let firstLine = `I'm playing PCT!`;
