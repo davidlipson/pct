@@ -13,36 +13,35 @@ const Text = styled(Typography)(() => ({
   color: "black",
   fontSize: "16px",
   fontWeight: 700,
+  height: "48px",
 }));
 
 export const Notice = ({ notice }: { notice: string }) => {
-  if (notice) {
-    return (
-      <Container
-        sx={{
-          "@keyframes jolt": {
-            "0%": {
-              transform: "translateX(0)",
-            },
-            "15%": {
-              transform: "translateX(5px)",
-            },
-            "30%": {
-              transform: "translateX(-5px)",
-            },
-            "45%": {
-              transform: "translateX(0px)",
-            },
-            "100%": {
-              transform: "translateX(0)",
-            },
+  return (
+    <Container
+      sx={{
+        "@keyframes jolt": {
+          "0%": {
+            transform: "translateX(0)",
           },
-          animation: "jolt 0.5s infinite",
-          animationIterationCount: 1,
-        }}
-      >
-        <Text>{notice}</Text>
-      </Container>
-    );
-  }
+          "15%": {
+            transform: "translateX(5px)",
+          },
+          "30%": {
+            transform: "translateX(-5px)",
+          },
+          "45%": {
+            transform: "translateX(0px)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+          },
+        },
+        animation: "jolt 0.5s infinite",
+        animationIterationCount: 1,
+      }}
+    >
+      <Text>{notice}</Text>
+    </Container>
+  );
 };

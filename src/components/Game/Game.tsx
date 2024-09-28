@@ -50,7 +50,6 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   display: "flex",
   alignSelf: "center",
   alignItems: "center",
-  marginTop: "48px",
   height: "100%",
   [theme.breakpoints.down("md")]: {
     width: "100%",
@@ -223,8 +222,9 @@ export const Game = () => {
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
-        <InnerContainer spacing={8} direction="column">
+        <InnerContainer spacing={4} direction="column">
           <TopContainer>
+            <Score found={found} />
             <Letters />
             <Box
               sx={(theme) => ({
@@ -236,7 +236,6 @@ export const Game = () => {
               <Notice notice={notice} />
             </Box>
           </TopContainer>
-          <Score found={found} />
           <BottomContainer>
             <Stack spacing={0.75}>
               <Guess found={found} guess={currentGuess} />
