@@ -27,7 +27,8 @@ const Entry = styled(Stack)(({ theme }) => ({
 
 export const Words = ({ totalWords }: { totalWords: number }) => {
   const { words } = useContext(GameContext);
-  const text = `${words.length} / ${totalWords} words found`;
+  const text =
+    totalWords > 0 ? `${words.length} / ${totalWords} words found` : "";
   return (
     <Box width="100%">
       <Accordion
