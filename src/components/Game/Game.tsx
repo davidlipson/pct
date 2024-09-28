@@ -72,8 +72,10 @@ const BottomContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   gap: "16px",
   [theme.breakpoints.down("md")]: {
+    position: "absolute",
+    bottom: "0",
     width: "95vw",
-    padding: "10px 10px 15px 10px",
+    padding: "10px 10px 10px 10px",
   },
   [theme.breakpoints.down("sm")]: {
     gap: "8px",
