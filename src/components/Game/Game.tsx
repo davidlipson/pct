@@ -228,7 +228,6 @@ export const Game = () => {
   return (
     <AppContainer
       boxSizing="border-box"
-      sx={{ height: `${height}px` }}
       tabIndex={0}
       ref={ref}
       onKeyUp={(e) => updateCurrentGuess(e.key)}
@@ -238,7 +237,7 @@ export const Game = () => {
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
-        <InnerContainer sx={{ height: `${height}px` }}>
+        <InnerContainer>
           <TopContainer>
             <Score found={found} />
 
