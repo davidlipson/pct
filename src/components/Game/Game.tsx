@@ -28,6 +28,7 @@ export enum View {
 }
 
 const AppContainer = styled(Stack)(({ theme }) => ({
+  outline: "none",
   width: "100%",
   flexDirection: "column",
   justifyContent: "center",
@@ -44,6 +45,7 @@ const AppContainer = styled(Stack)(({ theme }) => ({
 
 const InnerContainer = styled(Stack)(({ theme }) => ({
   width: "800px",
+  outline: "none",
   flexDirection: "column",
   justifyContent: "center",
   display: "flex",
@@ -60,6 +62,7 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
 
 const TopContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
+  outline: "none",
   justifyContent: "center",
   alignItems: "center",
   gap: "16px",
@@ -70,6 +73,7 @@ const TopContainer = styled(Stack)(({ theme }) => ({
 
 const BottomContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
+  outline: "none",
   gap: "16px",
   [theme.breakpoints.down("md")]: {
     position: "absolute",
@@ -210,6 +214,7 @@ export const Game = () => {
 
   useEffect(() => {
     const helper = async (e: any) => {
+      e.preventDefault();
       await updateCurrentGuess(e.key);
     };
     document.addEventListener("keyup", helper);
