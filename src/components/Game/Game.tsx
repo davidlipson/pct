@@ -50,8 +50,10 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
   alignItems: "center",
   height: "100%",
+  gap: "48px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
+    gap: "16px",
     justifyContent: "end",
     paddingTop: "48px",
   },
@@ -119,7 +121,7 @@ export const Game = () => {
     if (word.length < MIN_LENGTH) {
       return {
         status: false,
-        notice: `Word must be at least ${MIN_LENGTH} characters long!`,
+        notice: `${MIN_LENGTH} characters or longer!`,
       };
     }
 
@@ -235,7 +237,7 @@ export const Game = () => {
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
-        <InnerContainer spacing={8} direction="column">
+        <InnerContainer>
           <TopContainer>
             <Score found={found} />
 
