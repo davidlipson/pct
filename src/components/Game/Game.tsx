@@ -30,6 +30,7 @@ export enum View {
 const AppContainer = styled(Stack)(({ theme }) => ({
   outline: "none",
   width: "100%",
+  height: "100vh",
   flexDirection: "column",
   justifyContent: "center",
   display: "flex",
@@ -37,6 +38,7 @@ const AppContainer = styled(Stack)(({ theme }) => ({
   alignItems: "center",
   [theme.breakpoints.down("md")]: {
     padding: "0px 24px",
+    justifyContent: "space-between",
   },
   [theme.breakpoints.down("sm")]: {
     padding: "0px 8px",
