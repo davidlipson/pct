@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   Guess,
   HowToPlay,
@@ -62,7 +62,6 @@ const TopContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  boxShadow: "none !important",
   gap: "16px",
   [theme.breakpoints.down("sm")]: {
     gap: "8px",
@@ -72,7 +71,6 @@ const TopContainer = styled(Stack)(({ theme }) => ({
 const BottomContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   gap: "16px",
-  boxShadow: "none !important",
   [theme.breakpoints.down("md")]: {
     position: "absolute",
     bottom: "0",
@@ -85,7 +83,6 @@ const BottomContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export const Game = () => {
-  const ref = useRef(null);
   const { words, letters, addWord } = useContext(GameContext);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [notice, setNotice] = useState<string>(null);
@@ -166,29 +163,6 @@ export const Game = () => {
   };
 
   useEffect(() => {
-    ref.current.focus();
-  }, [ref]);
-
-  const updateCurrentGuess = async (key: string) => {
-    if (found > 0) {
-      setFound(null);
-      setNotice(null);
-      setCurrentGuess("");
-    }
-    if (key === "Enter") {
-      await submitWord(currentGuess);
-    } else if (key === "Backspace") {
-      setCurrentGuess((prev) => prev.slice(0, prev.length - 1));
-    } else if (
-      key.length === 1 &&
-      key.match(/[a-z]/i) &&
-      currentGuess.length < MAX_LENGTH
-    ) {
-      setCurrentGuess((prev) => prev + key.toLowerCase());
-    }
-  };
-
-  useEffect(() => {
     if (found === null) {
       return;
     }
@@ -215,14 +189,40 @@ export const Game = () => {
     return () => clearTimeout(timer);
   }, [notice]);
 
+  const updateCurrentGuess = async (key: string) => {
+    if (found > 0) {
+      setFound(null);
+      setNotice(null);
+      setCurrentGuess("");
+    }
+    if (key === "Enter") {
+      await submitWord(currentGuess);
+    } else if (key === "Backspace") {
+      setCurrentGuess((prev) => prev.slice(0, prev.length - 1));
+    } else if (
+      key.length === 1 &&
+      key.match(/[a-z]/i) &&
+      currentGuess.length < MAX_LENGTH
+    ) {
+      setCurrentGuess((prev) => prev + key.toLowerCase());
+    }
+  };
+
+  useEffect(() => {
+    const helper = async (e: any) => {
+      await updateCurrentGuess(e.key);
+    };
+    document.addEventListener("keyup", helper);
+
+    // Don't forget to clean up
+    return function cleanup() {
+      document.removeEventListener("keyup", helper);
+    };
+  }, []);
+
   return (
-    <AppContainer
-      boxSizing="border-box"
-      tabIndex={0}
-      ref={ref}
-      onKeyUp={(e) => updateCurrentGuess(e.key)}
-    >
-      <Info view={view} setView={setView} />
+    <AppContainer boxSizing="border-box" tabIndex={0}>
+      {false && <Info view={view} setView={setView} />}
 
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
