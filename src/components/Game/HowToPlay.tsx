@@ -11,13 +11,15 @@ import {
 import { ColourScheme } from "../../constants/colourScheme";
 
 const InnerContainer = styled(Container)(({ theme }) => ({
+  position: "absolute",
+  top: "50px",
   backgroundColor: "white",
+  marginTop: "24px",
   boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.2)",
   width: "100%",
   maxWidth: "600px",
   borderRadius: "7px",
   padding: "20px 48px 48px 48px",
-  gap: "20px",
   [theme.breakpoints.down("md")]: {
     maxWidth: "100%",
   },

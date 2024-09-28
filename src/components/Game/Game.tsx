@@ -62,6 +62,7 @@ const TopContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
+  boxShadow: "none !important",
   gap: "16px",
   [theme.breakpoints.down("sm")]: {
     gap: "8px",
@@ -71,6 +72,7 @@ const TopContainer = styled(Stack)(({ theme }) => ({
 const BottomContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   gap: "16px",
+  boxShadow: "none !important",
   [theme.breakpoints.down("md")]: {
     position: "absolute",
     bottom: "0",
@@ -89,19 +91,7 @@ export const Game = () => {
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
-  const [height, setHeight] = useState(window.innerHeight);
   const [totalWords, setTotalWords] = useState<number>(0);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setHeight(window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     setTotalWords(totalMatchingWords(letters));
