@@ -21,6 +21,7 @@ const InnerContainer = styled(Container)(({ theme }) => ({
   borderRadius: "7px",
   padding: "20px 48px 48px 48px",
   [theme.breakpoints.down("md")]: {
+    boxShadow: "none",
     maxWidth: "100%",
   },
 }));
