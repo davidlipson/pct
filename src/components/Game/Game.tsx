@@ -49,12 +49,11 @@ const InnerContainer = styled(Stack)(({ theme }) => ({
   display: "flex",
   alignSelf: "center",
   alignItems: "center",
-  height: "100%",
   gap: "48px",
   [theme.breakpoints.down("md")]: {
     width: "100%",
     gap: "16px",
-    justifyContent: "end",
+    justifyContent: "space-between",
     paddingTop: "48px",
   },
 }));
@@ -227,7 +226,7 @@ export const Game = () => {
   return (
     <AppContainer
       boxSizing="border-box"
-      sx={{ height: `${height}px`, outline: "none" }}
+      sx={{ height: `${height}px` }}
       tabIndex={0}
       ref={ref}
       onKeyUp={(e) => updateCurrentGuess(e.key)}
@@ -237,7 +236,7 @@ export const Game = () => {
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
-        <InnerContainer>
+        <InnerContainer sx={{ height: `${height}px` }}>
           <TopContainer>
             <Score found={found} />
 
