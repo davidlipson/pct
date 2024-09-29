@@ -85,11 +85,13 @@ export const Info = ({
               url,
               text,
             };
-            if (navigator.canShare(data)) {
+            if (navigator.share) {
               await navigator.share(data);
-            } else {
+            } else if (navigator.clipboard) {
               await navigator.clipboard.writeText(copyText);
               setNotice("Copied to clipboard!");
+            } else {
+              setNotice("Can't share from this browser.");
             }
             Sentry.captureEvent({
               message: "Share button clicked.",
