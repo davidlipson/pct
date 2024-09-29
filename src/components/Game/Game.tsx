@@ -74,6 +74,7 @@ const BottomContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   outline: "none",
   gap: "16px",
+  width: "100%",
   boxShadow: "none !important",
   [theme.breakpoints.down("md")]: {
     position: "absolute",
@@ -93,6 +94,7 @@ export const Game = () => {
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
+  const [wordsExpanded, setExpanded] = useState<boolean>(false);
 
   const isRepeatWord = (word: string) => {
     // can't be a repeat word!
@@ -240,11 +242,13 @@ export const Game = () => {
             </Box>
           </TopContainer>
           <BottomContainer>
-            <Stack spacing={0.75}>
-              <Guess found={found} guess={currentGuess} />
-            </Stack>
-            <Words />
-            <Keyboard submitKey={updateCurrentGuess} />
+            {!wordsExpanded && (
+              <Stack spacing={0.75}>
+                <Guess found={found} guess={currentGuess} />
+              </Stack>
+            )}
+            <Words expanded={wordsExpanded} setExpanded={setExpanded} />
+            {!wordsExpanded && <Keyboard submitKey={updateCurrentGuess} />}
             <Box
               sx={(theme) => ({
                 height: "48px",

@@ -20,12 +20,28 @@ const WordStack = styled(Stack)(({ theme }) => ({
 const Entry = styled(Stack)(({ theme }) => ({
   flexDirection: "row",
   justifyContent: "space-between",
-  padding: "2px",
   alignItems: "center",
+  paddingRight: "2px",
 }));
 
-export const Words = () => {
+export const Words = ({
+  expanded,
+  setExpanded,
+}: {
+  expanded: boolean;
+  setExpanded: (val: boolean) => void;
+}) => {
   const { words, totalWords } = useContext(GameContext);
+  // alphabetic words
+  const alphabeticallySorted = words.sort((a, b) => {
+    if (a.word < b.word) {
+      return -1;
+    }
+    if (a.word > b.word) {
+      return 1;
+    }
+    return 0;
+  });
   const [text, setText] = useState<string>("");
 
   useEffect(() => {
@@ -34,16 +50,34 @@ export const Words = () => {
     setText(total);
   }, [words, totalWords]);
 
+  const handleAccordionChange = (
+    event: React.SyntheticEvent,
+    isExpanded: boolean
+  ) => {
+    setExpanded(isExpanded);
+    console.log(`Accordion is now ${isExpanded ? "open" : "closed"}`);
+  };
+
   return (
     <Box width="100%">
       <Accordion
         sx={{
-          paddingX: "20px",
+          paddingX: "15px",
           boxShadow: "none",
+          margin: 0,
+          "&& .Mui-expanded": {
+            margin: "10px 0 0 0",
+            minHeight: "20px",
+          },
           border: `1.5px solid ${ColourScheme.GREY}`,
         }}
+        onChange={handleAccordionChange}
+        expanded={expanded}
       >
         <AccordionSummary
+          sx={{
+            margin: 0,
+          }}
           expandIcon={words.length ? <ExpandMoreIcon /> : <></>}
           aria-controls="panel1-content"
           id="panel1-header"
@@ -51,9 +85,13 @@ export const Words = () => {
         >
           <Typography color={ColourScheme.DARK_GREY}>{text}</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <WordStack width={1} direction="column" spacing={3}>
-            {words.map(({ word, points }, index) => (
+        <AccordionDetails
+          sx={{
+            paddingX: 0,
+          }}
+        >
+          <WordStack width={1} direction="column">
+            {alphabeticallySorted.map(({ word, points }, index) => (
               <Entry key={index}>
                 <Typography fontWeight={200}>{word}</Typography>
                 <Typography fontWeight={200} fontSize="12px">
