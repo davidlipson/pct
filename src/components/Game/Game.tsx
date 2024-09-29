@@ -228,7 +228,7 @@ export const Game = () => {
       ref={ref}
       onKeyUp={(e) => updateCurrentGuess(e.key)}
     >
-      <Info view={view} setView={setView} />
+      <Info view={view} setView={setView} setNotice={setNotice} />
 
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}

@@ -17,7 +17,15 @@ const Button = styled(Box)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-export const Info = ({ view, setView }: { view: View; setView: any }) => {
+export const Info = ({
+  view,
+  setView,
+  setNotice,
+}: {
+  view: View;
+  setView: any;
+  setNotice: any;
+}) => {
   const { words, letters, points } = useContext(GameContext);
   return (
     <>
@@ -69,15 +77,26 @@ export const Info = ({ view, setView }: { view: View; setView: any }) => {
           }
 
           const text = `${firstLine}\n\nPlay now!`;
-
+          const copyText = `${firstLine}\n\nPlay now at www.pctgame.com!`;
           try {
-            await navigator.share({
+            const data = {
               url: "www.pctgame.com",
               text,
-            });
+            };
+            if (navigator.canShare(data)) {
+              await navigator.share(data);
+            } else {
+              await navigator.clipboard.writeText(copyText);
+              setNotice("Copied to clipboard!");
+            }
             Sentry.captureEvent({
               message: "Share button clicked.",
-              extra: { words, letters, points },
+              extra: {
+                words,
+                letters,
+                points,
+                usedShare: navigator.canShare(data),
+              },
               level: "info",
             });
           } catch (e) {
