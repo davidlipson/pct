@@ -17,6 +17,8 @@ const Button = styled(Box)(({ theme }) => ({
   cursor: "pointer",
 }));
 
+const url = "https://www.pctgame.com";
+
 export const Info = ({
   view,
   setView,
@@ -77,12 +79,13 @@ export const Info = ({
           }
 
           const text = `${firstLine}\n\nPlay now!`;
-          const copyText = `${firstLine}\n\nPlay now at www.pctgame.com!`;
+          const copyText = `${firstLine}\n\nPlay now at ${url}!`;
           try {
             const data = {
-              url: "www.pctgame.com",
+              url,
               text,
             };
+            alert(navigator.canShare(data));
             if (navigator.canShare(data)) {
               await navigator.share(data);
             } else {
