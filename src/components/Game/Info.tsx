@@ -85,7 +85,6 @@ export const Info = ({
               url,
               text,
             };
-            alert(navigator.canShare(data));
             if (navigator.canShare(data)) {
               await navigator.share(data);
             } else {
