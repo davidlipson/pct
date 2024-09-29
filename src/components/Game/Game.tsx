@@ -12,11 +12,7 @@ import {
 } from ".";
 import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/material";
-import {
-  calculatePoints,
-  isSubSequence,
-  totalMatchingWords,
-} from "../../utils";
+import { calculatePoints, isSubSequence } from "../../utils";
 import { GameContext } from "../../App";
 import { MAX_LENGTH, MIN_LENGTH } from "../../constants";
 import { ALL_WORDS } from "../../constants";
@@ -97,11 +93,6 @@ export const Game = () => {
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
-  const [totalWords, setTotalWords] = useState<number>(0);
-
-  useEffect(() => {
-    setTotalWords(totalMatchingWords(letters));
-  }, [letters]);
 
   const isRepeatWord = (word: string) => {
     // can't be a repeat word!
@@ -252,7 +243,7 @@ export const Game = () => {
             <Stack spacing={0.75}>
               <Guess found={found} guess={currentGuess} />
             </Stack>
-            <Words totalWords={totalWords} />
+            <Words />
             <Keyboard submitKey={updateCurrentGuess} />
             <Box
               sx={(theme) => ({

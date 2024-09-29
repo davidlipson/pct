@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext } from "react";
 import { Game } from "./components/Game";
-import { todaysLetters } from "./utils";
+import { todaysLetters, totalMatchingWords } from "./utils";
 import { Login } from "./components";
 import { LEVELS } from "./constants";
 
@@ -20,6 +20,7 @@ interface GameContextType extends StoredValues {
   addWord: (word: string, points: number) => void;
   updateUsername: (name: string) => void;
   currentLevel: number;
+  totalWords: number;
 }
 
 export const GameContext = createContext<GameContextType>(
@@ -32,6 +33,7 @@ const App = () => {
   const [letters, _] = useState<string[]>(todaysLetters());
   const [words, setWords] = useState<Word[]>([]);
   const [username, setUsername] = useState<string>(null);
+  const [totalWords, setTotalWords] = useState<number>(0);
 
   const addWord = (word: string, points: number) => {
     setWords((prev) => [...prev, { word, points }]);
@@ -63,6 +65,7 @@ const App = () => {
 
   useEffect(() => {
     document.title = `Today's Letters: ${letters.join(" ").toUpperCase()}`;
+    setTotalWords(totalMatchingWords(letters));
   }, [letters]);
 
   useEffect(() => {
@@ -115,6 +118,7 @@ const App = () => {
         addWord,
         updateUsername,
         currentLevel,
+        totalWords,
       }}
     >
       {true || validUsername(username) ? <Game /> : <Login />}

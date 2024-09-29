@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GameContext } from "../../App";
 import { styled } from "@mui/material/styles";
 import {
@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ColourScheme } from "../../constants/colourScheme";
-import { LEVEL_TEXT, LEVELS } from "../../constants";
 
 const WordStack = styled(Stack)(({ theme }) => ({
   maxHeight: "300px",
@@ -25,10 +24,16 @@ const Entry = styled(Stack)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export const Words = ({ totalWords }: { totalWords: number }) => {
-  const { words } = useContext(GameContext);
-  const text =
-    totalWords > 0 ? `${words.length} / ${totalWords} words found` : "";
+export const Words = () => {
+  const { words, totalWords } = useContext(GameContext);
+  const [text, setText] = useState<string>("");
+
+  useEffect(() => {
+    const total =
+      totalWords > 0 ? `${words.length} / ${totalWords} words found` : "";
+    setText(total);
+  }, [words, totalWords]);
+
   return (
     <Box width="100%">
       <Accordion
