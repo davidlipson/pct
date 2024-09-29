@@ -91,7 +91,10 @@ export const Info = ({
               await navigator.clipboard.writeText(copyText);
               setNotice("Copied to clipboard!");
             } else {
-              setNotice("Can't share from this browser.");
+              setNotice("Can't share from this browser. Redirecting...");
+              setTimeout(() => {
+                window.location.href = url;
+              }, 2000);
             }
             Sentry.captureEvent({
               message: "Share button clicked.",
