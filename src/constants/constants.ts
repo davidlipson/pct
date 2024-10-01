@@ -1,7 +1,8 @@
 export const QWERTY = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
 export const LETTERS = QWERTY.join("").split("");
 export const MIN_LENGTH = 3;
-export const MAX_LENGTH = 12;
+export const MAX_LENGTH = 17;
+export const SHOW_CHARS = 12;
 
 export const NONE = 0;
 export const GOOD = 25;

@@ -3,6 +3,7 @@ import { Game } from "./components/Game";
 import { todaysLetters, totalMatchingWords } from "./utils";
 import { Login } from "./components";
 import { LEVELS } from "./constants";
+import * as Sentry from "@sentry/react";
 
 export interface Word {
   word: string;
@@ -37,6 +38,14 @@ const App = () => {
 
   const addWord = (word: string, points: number) => {
     setWords((prev) => [...prev, { word, points }]);
+    Sentry.captureEvent({
+      message: "Someone is playing.",
+      extra: {
+        totalWords: words.length,
+        letters,
+      },
+      level: "info",
+    });
   };
 
   const validUsername = (name: string) => {
@@ -108,6 +117,7 @@ const App = () => {
 
   const points = words.reduce((acc, curr) => acc + curr.points, 0);
   const currentLevel = getCurrentLevel(points);
+
   return (
     <GameContext.Provider
       value={{

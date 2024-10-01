@@ -32,7 +32,6 @@ export const Words = ({
   setExpanded: (val: boolean) => void;
 }) => {
   const { words, totalWords } = useContext(GameContext);
-  // alphabetic words
   const alphabeticallySorted = words.sort((a, b) => {
     if (a.word < b.word) {
       return -1;
@@ -43,6 +42,13 @@ export const Words = ({
     return 0;
   });
   const [text, setText] = useState<string>("");
+  const longestWord = alphabeticallySorted.reduce(
+    (acc, { word }) => (word.length > acc ? word.length : acc),
+    0
+  );
+  const firstWordWithMaxLetters = alphabeticallySorted.find(
+    ({ word }) => word.length === longestWord
+  );
 
   useEffect(() => {
     const total =
@@ -93,7 +99,20 @@ export const Words = ({
           <WordStack width={1} direction="column">
             {alphabeticallySorted.map(({ word, points }, index) => (
               <Entry key={index}>
-                <Typography fontWeight={200}>{word}</Typography>
+                <Stack direction="row" spacing={1} alignItems="baseline">
+                  <Typography fontWeight={200}>{word}</Typography>
+                  {word === firstWordWithMaxLetters?.word && (
+                    <Typography
+                      fontWeight={500}
+                      fontSize="12px"
+                      lineHeight={1.5}
+                      fontStyle="italic"
+                      color={ColourScheme.GREEN}
+                    >
+                      Best word!
+                    </Typography>
+                  )}
+                </Stack>
                 <Typography fontWeight={200} fontSize="12px">
                   ({points})
                 </Typography>

@@ -52,8 +52,10 @@ const Space = styled(Box)(({ theme }) => ({
 
 export const Keyboard = ({
   submitKey,
+  startBackspaceTimer,
 }: {
   submitKey: (key: string) => void;
+  startBackspaceTimer: () => void;
 }) => {
   return (
     <KeyboardStack>
@@ -90,7 +92,9 @@ export const Keyboard = ({
         <Key
           sx={{ fontSize: "12px", width: "150%" }}
           className="backspace"
-          onClick={() => submitKey("Backspace")}
+          onMouseDown={startBackspaceTimer}
+          onMouseUp={() => submitKey("Backspace")}
+          //onClick={() => submitKey("Backspace")}
         >
           DEL
         </Key>

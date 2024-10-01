@@ -12,7 +12,7 @@ export const allMatchingWords = (
     return (
       word.length >= MIN_LENGTH &&
       word.length <= MAX_LENGTH &&
-      isSubSequence(letters, word, letters.length, word.length) &&
+      isSubSequence(letters, word) &&
       (length ? word.length === length : true) &&
       (excludedWords ? !excludedWords.find((ew) => ew.word === word) : true)
     );
@@ -45,7 +45,9 @@ export const firstMatchingWord = (letters: string[]): string => {
 export const wordWithLettersNotInOrder = (letters: string[]): string => {
   return ALL_WORDS.find((word) => {
     return (
-      !isSubSequence(letters, word, letters.length, word.length) &&
+      word.length >= MIN_LENGTH &&
+      word.length <= MAX_LENGTH &&
+      !isSubSequence(letters, word) &&
       word.includes(letters[0][0]) &&
       word.includes(letters[1][0]) &&
       word.includes(letters[2][0])

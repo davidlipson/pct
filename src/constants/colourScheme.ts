@@ -8,6 +8,7 @@ export enum ColourScheme {
   BLUE = "#b69eff",
   GREY = "rgb(243, 243, 243)",
   DARK_GREY = "rgb(180, 180, 180)",
+  LIGHT_GREY = "rgb(240, 250, 250)",
   BLACK = "rgb(20, 20, 20)",
   WHITE = "rgb(255, 255, 255)",
 }

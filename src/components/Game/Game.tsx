@@ -16,6 +16,7 @@ import { calculatePoints, isSubSequence } from "../../utils";
 import { GameContext } from "../../App";
 import { MAX_LENGTH, MIN_LENGTH } from "../../constants";
 import { ALL_WORDS } from "../../constants";
+import { start } from "repl";
 
 export enum View {
   GAME = "GAME",
@@ -95,6 +96,10 @@ export const Game = () => {
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
   const [wordsExpanded, setExpanded] = useState<boolean>(false);
+  const [guessIndex, setGuessIndex] = useState<number>(0);
+  const [backspaceTimer, setBackspaceTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   const isRepeatWord = (word: string) => {
     // can't be a repeat word!
@@ -138,7 +143,7 @@ export const Game = () => {
     }
 
     // check if word has letters in order
-    const isSub = isSubSequence(letters, word, letters.length, word.length);
+    const isSub = isSubSequence(letters, word);
     return {
       status: isSub,
       notice: isSub ? "" : "Use today's letters in order!",
@@ -169,6 +174,10 @@ export const Game = () => {
   }, [ref]);
 
   const updateCurrentGuess = async (key: string) => {
+    if (backspaceTimer) {
+      clearTimeout(backspaceTimer);
+      setBackspaceTimer(null);
+    }
     if (found > 0) {
       setFound(null);
       setNotice(null);
@@ -177,15 +186,33 @@ export const Game = () => {
     if (key === "Enter") {
       await submitWord(currentGuess);
     } else if (key === "Backspace") {
-      setCurrentGuess((prev) => prev.slice(0, prev.length - 1));
+      setCurrentGuess((prev) => {
+        if (guessIndex >= prev.length) {
+          return prev.slice(0, -1);
+        }
+        const beforeCurrentGuess = prev.slice(0, guessIndex);
+        const afterCurrentGuess = prev.slice(guessIndex + 1, prev.length);
+        return beforeCurrentGuess + afterCurrentGuess;
+      });
     } else if (
       key.length === 1 &&
       key.match(/[a-z]/i) &&
-      currentGuess.length < MAX_LENGTH
+      (currentGuess.length < MAX_LENGTH || guessIndex < currentGuess.length)
     ) {
-      setCurrentGuess((prev) => prev + key.toLowerCase());
+      setCurrentGuess((prev) => {
+        if (guessIndex >= prev.length) {
+          return prev + key.toLowerCase();
+        }
+        const beforeCurrentGuess = prev.slice(0, guessIndex);
+        const afterCurrentGuess = prev.slice(guessIndex + 1, prev.length);
+        return beforeCurrentGuess + key.toLowerCase() + afterCurrentGuess;
+      });
     }
   };
+
+  useEffect(() => {
+    setGuessIndex(currentGuess.length);
+  }, [currentGuess]);
 
   useEffect(() => {
     if (found === null) {
@@ -214,11 +241,26 @@ export const Game = () => {
     return () => clearTimeout(timer);
   }, [notice]);
 
+  const startBackspaceTimer = () => {
+    if (!backspaceTimer) {
+      setBackspaceTimer(
+        setTimeout(() => {
+          setCurrentGuess("");
+        }, 500)
+      );
+    }
+  };
+
   return (
     <AppContainer
       boxSizing="border-box"
       tabIndex={0}
       ref={ref}
+      onKeyDown={(e) => {
+        if (e.key === "Backspace") {
+          startBackspaceTimer();
+        }
+      }}
       onKeyUp={(e) => updateCurrentGuess(e.key)}
     >
       <Info view={view} setView={setView} setNotice={setNotice} />
@@ -244,11 +286,21 @@ export const Game = () => {
           <BottomContainer>
             {!wordsExpanded && (
               <Stack spacing={0.75}>
-                <Guess found={found} guess={currentGuess} />
+                <Guess
+                  guessIndex={guessIndex}
+                  setGuessIndex={setGuessIndex}
+                  found={found}
+                  guess={currentGuess}
+                />
               </Stack>
             )}
             <Words expanded={wordsExpanded} setExpanded={setExpanded} />
-            {!wordsExpanded && <Keyboard submitKey={updateCurrentGuess} />}
+            {!wordsExpanded && (
+              <Keyboard
+                startBackspaceTimer={startBackspaceTimer}
+                submitKey={updateCurrentGuess}
+              />
+            )}
             <Box
               sx={(theme) => ({
                 height: "48px",

@@ -3,12 +3,13 @@ import { GameContext } from "../../App";
 import { Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ColourScheme } from "../../constants/colourScheme";
-import { MAX_LENGTH } from "../../constants";
+import { MAX_LENGTH, SHOW_CHARS } from "../../constants";
 
 const Letter = styled(Stack)(({ theme }) => ({
   textAlign: "center",
   alignContent: "center",
   height: "100%",
+  cursor: "pointer",
   justifyContent: "center",
   width: "60px",
   fontSize: "30px",
@@ -36,9 +37,19 @@ const GuessStack = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export const Guess = ({ guess, found }: { guess: string; found: number }) => {
+export const Guess = ({
+  guess,
+  found,
+  guessIndex,
+  setGuessIndex,
+}: {
+  guess: string;
+  found: number;
+  guessIndex: number;
+  setGuessIndex: (ind: number) => void;
+}) => {
   const { letters } = useContext(GameContext);
-  const paddedGuess = guess.padEnd(MAX_LENGTH, " ");
+  const paddedGuess = guess.padEnd(SHOW_CHARS, " ");
 
   const colour = () => {
     return ColourScheme.GREEN;
@@ -48,7 +59,12 @@ export const Guess = ({ guess, found }: { guess: string; found: number }) => {
     <GuessStack direction="row">
       {paddedGuess.split("").map((letter, index) => (
         <Letter
+          onClick={() => index <= guess.length && setGuessIndex(index)}
           sx={{
+            backgroundColor:
+              index === guessIndex
+                ? ColourScheme.LIGHT_GREY
+                : ColourScheme.WHITE,
             borderColor:
               letters.includes(letter) &&
               `${found > 0 ? colour() : ColourScheme.GREEN} !important`,

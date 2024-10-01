@@ -30,7 +30,6 @@ export const Letters = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-  console.log(navigator);
   return (
     <LetterContainer>
       {letters.map((letter, index) => (
