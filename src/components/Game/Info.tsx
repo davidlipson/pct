@@ -40,7 +40,7 @@ export const shareOnClick = async (
   const text = `${firstLine}\n\nPlay now!`;
   try {
     const data = {
-      url,
+      url: `${url}?share=true`,
       text,
     };
     if (navigator.share) {
