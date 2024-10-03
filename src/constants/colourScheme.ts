@@ -4,7 +4,6 @@ export enum ColourScheme {
   GREEN = "#77e39c",
   GOOD_GREEN = "#c6fad8",
   GREAT_GREEN = "#8FF1B1",
-  YELLOW = "#f5d49d",
   BLUE = "#b69eff",
   GREY = "rgb(243, 243, 243)",
   DARK_GREY = "rgb(180, 180, 180)",

@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { GENIUS, LETTERS, MIN_WORDS } from "../constants/constants";
-import { totalMatchingWords } from "./totalMatchingWords";
+import { LETTERS, MIN_WORDS } from "../constants/constants";
+import { allMatchingWords } from "./totalMatchingWords";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -38,12 +38,12 @@ export const todaysLetters = (): string[] => {
           timeInToronto.day()) %
           LETTERS.length
       ].toLowerCase();
-    const totalWords = totalMatchingWords([
+    const totalWords = allMatchingWords([
       firstLetter,
       secondLetter,
       thirdLetter,
     ]);
-    if (totalWords >= MIN_WORDS) {
+    if (totalWords.length >= MIN_WORDS) {
       return [firstLetter, secondLetter, thirdLetter];
     }
     iterOne++;

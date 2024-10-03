@@ -8,3 +8,6 @@ export * from "./Info";
 export * from "./Score";
 export * from "./Game";
 export * from "./Leaderboard";
+export * from "./Login";
+export * from "./Progress";
+export * from "./ShareText";

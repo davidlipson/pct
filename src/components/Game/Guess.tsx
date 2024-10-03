@@ -49,7 +49,10 @@ export const Guess = ({
   setGuessIndex: (ind: number) => void;
 }) => {
   const { letters } = useContext(GameContext);
-  const paddedGuess = guess.padEnd(SHOW_CHARS, " ");
+  let paddedGuess = guess.padEnd(SHOW_CHARS, " ");
+  if (guess.length > SHOW_CHARS - 1 && guess.length < MAX_LENGTH) {
+    paddedGuess = paddedGuess + " ";
+  }
 
   const colour = () => {
     return ColourScheme.GREEN;

@@ -9,11 +9,13 @@ import {
   wordWithLettersNotInOrder,
 } from "../../utils";
 import { ColourScheme } from "../../constants/colourScheme";
+import { WORDS_GOAL } from "../../constants";
 
 const InnerContainer = styled(Container)(({ theme }) => ({
   position: "absolute",
   top: "50px",
   backgroundColor: "white",
+  zIndex: 1000,
   marginTop: "24px",
   boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.2)",
   width: "100%",
@@ -56,8 +58,8 @@ export const HowToPlay = () => {
           .
         </DirectionText>
         <DirectionText>
-          You must create as many words as you can using these letters as a
-          subsequence.
+          Your goal is to get as many points as possible in{" "}
+          <strong>{WORDS_GOAL}</strong> words.
         </DirectionText>
         <DirectionText>
           The letters must remain in order, but do not need to be consecutive.

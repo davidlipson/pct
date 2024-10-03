@@ -9,14 +9,17 @@ import {
   Info,
   Words,
   Leaderboard,
+  Login,
+  Progress,
+  shareOnClick,
+  ShareText,
 } from ".";
 import { styled } from "@mui/material/styles";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { calculatePoints, isSubSequence } from "../../utils";
 import { GameContext } from "../../App";
-import { MAX_LENGTH, MIN_LENGTH } from "../../constants";
+import { MAX_LENGTH, MIN_LENGTH, WORDS_GOAL } from "../../constants";
 import { ALL_WORDS } from "../../constants";
-import { start } from "repl";
 
 export enum View {
   GAME = "GAME",
@@ -90,13 +93,14 @@ const BottomContainer = styled(Stack)(({ theme }) => ({
 
 export const Game = () => {
   const ref = useRef(null);
-  const { words, letters, addWord } = useContext(GameContext);
+  const { words, letters, addWord, points } = useContext(GameContext);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
   const [view, setView] = useState<View>(View.GAME);
   const [wordsExpanded, setExpanded] = useState<boolean>(false);
   const [guessIndex, setGuessIndex] = useState<number>(0);
+  const [allowTyping, setAllowTyping] = useState<boolean>(true);
   const [backspaceTimer, setBackspaceTimer] = useState<NodeJS.Timeout | null>(
     null
   );
@@ -174,6 +178,9 @@ export const Game = () => {
   }, [ref]);
 
   const updateCurrentGuess = async (key: string) => {
+    if (!allowTyping || words.length >= WORDS_GOAL) {
+      return;
+    }
     if (backspaceTimer) {
       clearTimeout(backspaceTimer);
       setBackspaceTimer(null);
@@ -264,7 +271,6 @@ export const Game = () => {
       onKeyUp={(e) => updateCurrentGuess(e.key)}
     >
       <Info view={view} setView={setView} setNotice={setNotice} />
-
       {view === View.LEADERBOARD && <Leaderboard />}
       {view === View.HOW_TO_PLAY && <HowToPlay />}
       {view === View.GAME && (
@@ -281,10 +287,13 @@ export const Game = () => {
               })}
             >
               <Notice notice={notice} />
+              {words.length >= WORDS_GOAL && (
+                <ShareText setNotice={setNotice} />
+              )}
             </Box>
           </TopContainer>
           <BottomContainer>
-            {!wordsExpanded && (
+            {!wordsExpanded && words.length < WORDS_GOAL && (
               <Stack spacing={0.75}>
                 <Guess
                   guessIndex={guessIndex}
@@ -294,8 +303,14 @@ export const Game = () => {
                 />
               </Stack>
             )}
-            <Words expanded={wordsExpanded} setExpanded={setExpanded} />
-            {!wordsExpanded && (
+            <Stack spacing={1}>
+              <Progress />
+              <Words
+                expanded={wordsExpanded || words.length >= WORDS_GOAL}
+                setExpanded={setExpanded}
+              />
+            </Stack>
+            {!wordsExpanded && words.length < WORDS_GOAL && (
               <Keyboard
                 startBackspaceTimer={startBackspaceTimer}
                 submitKey={updateCurrentGuess}
@@ -309,11 +324,15 @@ export const Game = () => {
                 },
               })}
             >
+              {words.length >= WORDS_GOAL && (
+                <ShareText setNotice={setNotice} />
+              )}
               <Notice notice={notice} />
             </Box>
           </BottomContainer>
         </InnerContainer>
       )}
+      {false && <Login setAllowTyping={setAllowTyping} />}
     </AppContainer>
   );
 };

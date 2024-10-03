@@ -2,13 +2,13 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import mixpanel from "mixpanel-browser";
 
-import * as Sentry from "@sentry/react";
-
-Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY,
-  integrations: [Sentry.browserTracingIntegration()],
-  tracesSampleRate: 1.0,
+// Near entry of your product, init Mixpanel
+mixpanel.init(process.env.REACT_APP_MP, {
+  debug: true,
+  track_pageview: true,
+  persistence: "localStorage",
 });
 
 const root = ReactDOM.createRoot(

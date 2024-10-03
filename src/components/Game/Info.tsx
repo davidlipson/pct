@@ -2,12 +2,65 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SendIcon from "@mui/icons-material/Send";
 import { useContext } from "react";
-import { GameContext } from "../../App";
-import * as Sentry from "@sentry/react";
+import { GameContext, Word } from "../../App";
 import CancelIcon from "@mui/icons-material/Cancel";
 import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { View } from "./Game";
+import mixpanel from "mixpanel-browser";
+import { WORDS_GOAL } from "../../constants";
+
+export const shareOnClick = async (
+  points: number,
+  letters: string[],
+  words: Word[],
+  setNotice: (notice: string) => void
+) => {
+  let firstLine = `I'm playing PCT!`;
+  const sortedWords = words
+    .sort((a, b) => b.word.length - a.word.length)
+    .slice(0, 3);
+
+  if (words.length >= WORDS_GOAL) {
+    firstLine = `I beat ${letters
+      .map((letter) => letter.toUpperCase())
+      .join(
+        "."
+      )}!\nCheck my top words:\n(Total points: ${points})\n\n${sortedWords
+      .map((word) => word.word[0].toUpperCase() + word.word.slice(1))
+      .join("\n")}`;
+  } else if (points > 0) {
+    firstLine = `Check my top words for ${letters
+      .map((letter) => letter.toUpperCase())
+      .join(".")} so far:\n(Total points: ${points})\n\n${sortedWords
+      .map((word) => word.word[0].toUpperCase() + word.word.slice(1))
+      .join("\n")}`;
+  }
+
+  const text = `${firstLine}\n\nPlay now!`;
+  try {
+    const data = {
+      url,
+      text,
+    };
+    if (navigator.share) {
+      await navigator.share(data);
+    } else {
+      setNotice("Can't share from this browser. Redirecting...");
+      setTimeout(() => {
+        window.location.href = url;
+      }, 2000);
+    }
+    mixpanel.track("Share button clicked.", {
+      words,
+      letters,
+      points,
+      usedShare: navigator.canShare(data),
+    });
+  } catch (e) {
+    console.error("Error sharing", e);
+  }
+};
 
 const Button = styled(Box)(({ theme }) => ({
   zIndex: 10,
@@ -65,50 +118,7 @@ export const Info = ({
           },
         })}
         onClick={async () => {
-          let firstLine = `I'm playing PCT!`;
-          if (points > 0) {
-            const sortedWords = words
-              .sort((a, b) => b.word.length - a.word.length)
-              .slice(0, 3);
-
-            firstLine = `Check out my top words for ${letters
-              .map((letter) => letter.toUpperCase())
-              .join(".")}:\n(Total points: ${points})\n\n${sortedWords
-              .map((word) => word.word[0].toUpperCase() + word.word.slice(1))
-              .join("\n")}`;
-          }
-
-          const text = `${firstLine}\n\nPlay now!`;
-          const copyText = `${firstLine}\n\nPlay now at ${url}!`;
-          try {
-            const data = {
-              url,
-              text,
-            };
-            if (navigator.share) {
-              await navigator.share(data);
-            } else if (navigator.clipboard) {
-              await navigator.clipboard.writeText(copyText);
-              setNotice("Copied to clipboard!");
-            } else {
-              setNotice("Can't share from this browser. Redirecting...");
-              setTimeout(() => {
-                window.location.href = url;
-              }, 2000);
-            }
-            Sentry.captureEvent({
-              message: "Share button clicked.",
-              extra: {
-                words,
-                letters,
-                points,
-                usedShare: navigator.canShare(data),
-              },
-              level: "info",
-            });
-          } catch (e) {
-            console.error("Error sharing", e);
-          }
+          shareOnClick(points, letters, words, setNotice);
         }}
       >
         <SendIcon />

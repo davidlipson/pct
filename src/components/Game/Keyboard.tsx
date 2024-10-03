@@ -40,6 +40,7 @@ const Key = styled(Stack)(({ theme }) => ({
   lineHeight: "50px",
   alignContent: "center",
   cursor: "pointer",
+  userSelect: "none",
   ":hover": {
     opacity: 0.6,
   },

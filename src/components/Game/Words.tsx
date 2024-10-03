@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ColourScheme } from "../../constants/colourScheme";
+import { WORDS_GOAL } from "../../constants";
 
 const WordStack = styled(Stack)(({ theme }) => ({
   maxHeight: "300px",
@@ -51,8 +52,10 @@ export const Words = ({
   );
 
   useEffect(() => {
-    const total =
-      totalWords > 0 ? `${words.length} / ${totalWords} words found` : "";
+    let total = totalWords === 0 ? "" : `You hit today's goal! Now go outside.`;
+    if (words.length < WORDS_GOAL) {
+      total = `${words.length} / ${WORDS_GOAL} words found`;
+    }
     setText(total);
   }, [words, totalWords]);
 
@@ -84,7 +87,13 @@ export const Words = ({
           sx={{
             margin: 0,
           }}
-          expandIcon={words.length ? <ExpandMoreIcon /> : <></>}
+          expandIcon={
+            words.length && words.length < WORDS_GOAL ? (
+              <ExpandMoreIcon />
+            ) : (
+              <></>
+            )
+          }
           aria-controls="panel1-content"
           id="panel1-header"
           disabled={words.length === 0}

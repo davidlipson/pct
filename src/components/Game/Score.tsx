@@ -1,18 +1,10 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { ColourScheme } from "../../constants/colourScheme";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { GameContext } from "../../App";
 import { styled } from "@mui/material/styles";
-import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { LEVEL_TEXT, LEVELS } from "../../constants";
-
-const Container = styled(Stack)(({ theme }) => ({
-  flexDirection: "row",
-  gap: "5px",
-  width: "100%",
-  justifyContent: "center",
-}));
+import { WORDS_GOAL } from "../../constants";
 
 type TextProps = {
   small?: boolean;
@@ -22,10 +14,11 @@ const Text = styled(Typography)<TextProps>(({ theme, small }) => ({
   color: ColourScheme.GREEN,
   fontSize: small ? "24px" : "100px",
   fontWeight: 700,
+  lineHeight: small ? "24px" : "100px",
 }));
 
 export const Score = ({ found }: { found: number }) => {
-  const { points, currentLevel } = useContext(GameContext);
+  const { points, currentLevel, words } = useContext(GameContext);
   /* const [level, setLevel] = useState(0);
   const [percent, setPercent] = useState(0);
    const [hideBar, setHideBar] = useState(false);
