@@ -38,14 +38,6 @@ const App = () => {
 
   const addWord = (word: string, points: number) => {
     setWords((prev) => [...prev, { word, points }]);
-    Sentry.captureEvent({
-      message: "Someone is playing.",
-      extra: {
-        totalWords: words.length,
-        letters,
-      },
-      level: "info",
-    });
   };
 
   const validUsername = (name: string) => {
@@ -113,6 +105,15 @@ const App = () => {
       localStorageId,
       JSON.stringify({ words, letters, username })
     );
+    Sentry.captureEvent({
+      message: "Someone is playing.",
+      extra: {
+        totalWords: words.length,
+        letters,
+        points: words.reduce((acc, curr) => acc + curr.points, 0),
+      },
+      level: "info",
+    });
   }, [words]);
 
   const points = words.reduce((acc, curr) => acc + curr.points, 0);
