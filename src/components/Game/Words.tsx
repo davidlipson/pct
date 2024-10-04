@@ -123,7 +123,7 @@ export const Words = ({
                   )}
                 </Stack>
                 <Typography fontWeight={200} fontSize="12px">
-                  ({points})
+                  {points}
                 </Typography>
               </Entry>
             ))}
