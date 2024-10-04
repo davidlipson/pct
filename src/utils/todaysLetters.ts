@@ -3,6 +3,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { LETTERS, MIN_WORDS } from "../constants/constants";
 import { allMatchingWords } from "./totalMatchingWords";
+import { calculatePoints } from "./calculatePoints";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

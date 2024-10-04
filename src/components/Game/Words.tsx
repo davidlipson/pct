@@ -32,7 +32,7 @@ export const Words = ({
   expanded: boolean;
   setExpanded: (val: boolean) => void;
 }) => {
-  const { words, totalWords } = useContext(GameContext);
+  const { words } = useContext(GameContext);
   const alphabeticallySorted = words.sort((a, b) => {
     if (a.word < b.word) {
       return -1;
@@ -52,12 +52,12 @@ export const Words = ({
   );
 
   useEffect(() => {
-    let total = totalWords === 0 ? "" : `You hit today's goal! Now go outside.`;
+    let total = `You hit today's goal! Now go outside.`;
     if (words.length < WORDS_GOAL) {
       total = `${words.length} / ${WORDS_GOAL} words found`;
     }
     setText(total);
-  }, [words, totalWords]);
+  }, [words]);
 
   const handleAccordionChange = (
     event: React.SyntheticEvent,
@@ -118,7 +118,7 @@ export const Words = ({
                       fontStyle="italic"
                       color={ColourScheme.GREEN}
                     >
-                      Best word!
+                      Your best word!
                     </Typography>
                   )}
                 </Stack>

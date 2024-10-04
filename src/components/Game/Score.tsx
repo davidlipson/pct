@@ -18,7 +18,7 @@ const Text = styled(Typography)<TextProps>(({ theme, small }) => ({
 }));
 
 export const Score = ({ found }: { found: number }) => {
-  const { points, currentLevel, words } = useContext(GameContext);
+  const { points, max, words } = useContext(GameContext);
   /* const [level, setLevel] = useState(0);
   const [percent, setPercent] = useState(0);
    const [hideBar, setHideBar] = useState(false);
@@ -66,9 +66,14 @@ export const Score = ({ found }: { found: number }) => {
   }, [percent]);*/
 
   return (
-    <Stack direction="row">
-      <Text>{points}</Text>
-      <Text small>{found ? `+ ${found}` : ""}</Text>
+    <Stack direction="row" alignItems="baseline">
+      <Stack direction="row">
+        <Text>{points}</Text>
+        <Text small>{found ? `+ ${found}` : ""}</Text>
+      </Stack>
+      {false && words.length >= WORDS_GOAL && max >= 0 && (
+        <Text small>{`/ ${max}`}</Text>
+      )}
     </Stack>
   );
 

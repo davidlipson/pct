@@ -1,6 +1,6 @@
-import { useEffect, useState, createContext, useRef } from "react";
+import { useEffect, useState, createContext } from "react";
 import { Game } from "./components/Game";
-import { todaysLetters, totalMatchingWords } from "./utils";
+import { todaysLetters } from "./utils";
 import { LEVELS, WORDS_GOAL } from "./constants";
 import mixpanel from "mixpanel-browser";
 import { Stack, Typography } from "@mui/material";
@@ -23,6 +23,7 @@ interface GameContextType extends StoredValues {
   currentLevel: number;
   totalWords: number;
   username: string;
+  max: number;
 }
 
 export const GameContext = createContext<GameContextType>(
@@ -36,6 +37,7 @@ const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [showScreen, setShowScreen] = useState<boolean>(false);
   const [letters, setLetters] = useState<string[]>(todaysLetters());
+  const [max, setMax] = useState<number>(null);
   const [words, setWords] = useState<Word[]>([]);
   const [username, setUsername] = useState<string>(
     localStorage.getItem(usernameStoreageId)
@@ -73,7 +75,8 @@ const App = () => {
 
   useEffect(() => {
     document.title = `Today's Letters: ${letters.join(" ").toUpperCase()}`;
-    setTotalWords(totalMatchingWords(letters));
+    //setTotalWords(totalMatchingWords(letters));
+    //setMax(todaysMax(letters));
   }, [letters]);
 
   useEffect(() => {
@@ -171,6 +174,7 @@ const App = () => {
           validUsername,
           currentLevel,
           totalWords,
+          max,
         }}
       >
         <Game />

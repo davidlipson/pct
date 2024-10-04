@@ -286,8 +286,9 @@ export const Game = () => {
                 },
               })}
             >
-              <Notice notice={notice} />
-              {false && words.length >= WORDS_GOAL && (
+              {words.length < WORDS_GOAL ? (
+                <Notice notice={notice} />
+              ) : (
                 <ShareText setNotice={setNotice} />
               )}
             </Box>
