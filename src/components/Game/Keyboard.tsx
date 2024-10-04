@@ -64,7 +64,10 @@ export const Keyboard = ({
         {firstRow.map((c) => (
           <Key
             key={c}
-            onTouchEnd={() => submitKey(c)}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              submitKey(c);
+            }}
             onMouseUp={() => submitKey(c)}
           >
             {c.toUpperCase()}
@@ -76,7 +79,10 @@ export const Keyboard = ({
         {secondRow.map((c) => (
           <Key
             key={c}
-            onTouchEnd={() => submitKey(c)}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              submitKey(c);
+            }}
             onMouseUp={() => submitKey(c)}
           >
             {c.toUpperCase()}
@@ -88,7 +94,10 @@ export const Keyboard = ({
         <Key
           sx={{ fontSize: "10px", width: "150%" }}
           className="enter"
-          onTouchEnd={() => submitKey("Enter")}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            submitKey("Enter");
+          }}
           onMouseUp={() => submitKey("Enter")}
         >
           ENTER
@@ -96,7 +105,10 @@ export const Keyboard = ({
         {thirdRow.map((c) => (
           <Key
             key={c}
-            onTouchEnd={() => submitKey(c)}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              submitKey(c);
+            }}
             onMouseUp={() => submitKey(c)}
           >
             {c.toUpperCase()}
@@ -106,7 +118,10 @@ export const Keyboard = ({
         <Key
           sx={{ fontSize: "12px", width: "150%" }}
           className="backspace"
-          onTouchStart={startBackspaceTimer}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            startBackspaceTimer();
+          }}
           onTouchEnd={(e) => {
             e.preventDefault();
             submitKey("Backspace");
