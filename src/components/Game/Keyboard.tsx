@@ -62,7 +62,11 @@ export const Keyboard = ({
     <KeyboardStack>
       <KeyRow>
         {firstRow.map((c) => (
-          <Key key={c} onClick={() => submitKey(c)}>
+          <Key
+            key={c}
+            onTouchEnd={() => submitKey(c)}
+            onMouseUp={() => submitKey(c)}
+          >
             {c.toUpperCase()}
           </Key>
         ))}
@@ -70,7 +74,11 @@ export const Keyboard = ({
       <KeyRow>
         <Space />
         {secondRow.map((c) => (
-          <Key key={c} onClick={() => submitKey(c)}>
+          <Key
+            key={c}
+            onTouchEnd={() => submitKey(c)}
+            onMouseUp={() => submitKey(c)}
+          >
             {c.toUpperCase()}
           </Key>
         ))}
@@ -80,12 +88,17 @@ export const Keyboard = ({
         <Key
           sx={{ fontSize: "10px", width: "150%" }}
           className="enter"
-          onClick={() => submitKey("Enter")}
+          onTouchEnd={() => submitKey("Enter")}
+          onMouseUp={() => submitKey("Enter")}
         >
           ENTER
         </Key>
         {thirdRow.map((c) => (
-          <Key onClick={() => submitKey(c)} key={c}>
+          <Key
+            key={c}
+            onTouchEnd={() => submitKey(c)}
+            onMouseUp={() => submitKey(c)}
+          >
             {c.toUpperCase()}
           </Key>
         ))}
@@ -93,9 +106,13 @@ export const Keyboard = ({
         <Key
           sx={{ fontSize: "12px", width: "150%" }}
           className="backspace"
+          onTouchStart={startBackspaceTimer}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            submitKey("Backspace");
+          }}
           onMouseDown={startBackspaceTimer}
           onMouseUp={() => submitKey("Backspace")}
-          //onClick={() => submitKey("Backspace")}
         >
           DEL
         </Key>
