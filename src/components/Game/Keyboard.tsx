@@ -23,7 +23,7 @@ const KeyboardStack = styled(Stack)(({ theme }) => ({
 const KeyRow = styled(Stack)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  gap: "6px",
+  gap: "7px",
   justifyContent: "center",
 }));
 
