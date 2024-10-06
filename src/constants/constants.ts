@@ -12,4 +12,4 @@ export const GENIUS = 100;
 export const MIN_WORDS = 1000;
 export const MAX_WORDS = 10000;
 export const LEVELS = [NONE, GOOD, GREAT, GENIUS];
-export const WORDS_GOAL = 25;
+export const WORDS_GOAL = 20;
