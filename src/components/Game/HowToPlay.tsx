@@ -105,8 +105,8 @@ export const HowToPlay = ({
                     .join(", ")}{" "}
                   and {letters[2].toUpperCase()}
                 </strong>{" "}
-                do not need to appear in a row, however they must each appear at
-                least once in the order provided.
+                do not need to appear back-to-back, however they must appear in
+                the order provided.
               </DirectionText>
             </Stack>
 
