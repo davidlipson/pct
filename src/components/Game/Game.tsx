@@ -8,23 +8,23 @@ import {
   Score,
   Info,
   Words,
-  Leaderboard,
   Login,
   Progress,
-  shareOnClick,
   ShareText,
+  Feedback,
 } from ".";
 import { styled } from "@mui/material/styles";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { calculatePoints, isSubSequence } from "../../utils";
 import { GameContext } from "../../App";
-import { MAX_LENGTH, MIN_LENGTH, WORDS_GOAL } from "../../constants";
-import { ALL_WORDS } from "../../constants";
+import { ALL_WORDS, MAX_LENGTH, MIN_LENGTH } from "../../constants";
+import mixpanel from "mixpanel-browser";
 
 export enum View {
   GAME = "GAME",
   HOW_TO_PLAY = "HOW_TO_PLAY",
   LEADERBOARD = "LEADERBOARD",
+  FEEDBACK = "FEEDBACK",
 }
 
 const AppContainer = styled(Stack)(({ theme }) => ({
@@ -93,11 +93,16 @@ const BottomContainer = styled(Stack)(({ theme }) => ({
 
 export const Game = () => {
   const ref = useRef(null);
-  const { words, letters, addWord, points } = useContext(GameContext);
+  const {
+    words,
+    letters: { letters },
+    addWord,
+    target,
+  } = useContext(GameContext);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
-  const [view, setView] = useState<View>(View.GAME);
+  const [view, setView] = useState<View>(View.HOW_TO_PLAY);
   const [wordsExpanded, setExpanded] = useState<boolean>(false);
   const [guessIndex, setGuessIndex] = useState<number>(0);
   const [allowTyping, setAllowTyping] = useState<boolean>(true);
@@ -131,19 +136,24 @@ export const Game = () => {
       };
     }
 
-    /*const result = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
-      {
-        method: "GET",
-      }
-    );*/
-
-    //if (result.status !== 200) {
     if (!ALL_WORDS.includes(word)) {
+      /*const result = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (result.status !== 200) {*/
       return {
         status: false,
-        notice: "Not a word!",
+        notice: "Not found!",
       };
+      /* }
+
+      mixpanel.track("Word not in dictionary.", {
+        word,
+      });*/
     }
 
     // check if word has letters in order
@@ -178,7 +188,7 @@ export const Game = () => {
   }, [ref]);
 
   const updateCurrentGuess = async (key: string) => {
-    if (!allowTyping || words.length >= WORDS_GOAL) {
+    if (!allowTyping || words.length >= target || View.GAME !== view) {
       return;
     }
     if (backspaceTimer) {
@@ -271,68 +281,67 @@ export const Game = () => {
       onKeyUp={(e) => updateCurrentGuess(e.key)}
     >
       <Info view={view} setView={setView} setNotice={setNotice} />
-      {view === View.LEADERBOARD && <Leaderboard />}
-      {view === View.HOW_TO_PLAY && <HowToPlay />}
-      {view === View.GAME && (
-        <InnerContainer>
-          <TopContainer>
-            <Score found={found} />
+      <HowToPlay open={view === View.HOW_TO_PLAY} setView={setView} />
+      <Feedback
+        open={view === View.FEEDBACK}
+        onClose={() => setView(View.GAME)}
+      />
+      <InnerContainer>
+        <TopContainer>
+          <Score found={found} />
 
-            <Letters />
-            <Box
-              sx={(theme) => ({
-                [theme.breakpoints.up("md")]: {
-                  display: "none",
-                },
-              })}
-            >
-              {words.length < WORDS_GOAL ? (
-                <Notice notice={notice} />
-              ) : (
-                <ShareText setNotice={setNotice} />
-              )}
-            </Box>
-          </TopContainer>
-          <BottomContainer>
-            {!wordsExpanded && words.length < WORDS_GOAL && (
-              <Stack spacing={0.75}>
-                <Guess
-                  guessIndex={guessIndex}
-                  setGuessIndex={setGuessIndex}
-                  found={found}
-                  guess={currentGuess}
-                />
-              </Stack>
+          <Letters />
+          <Box
+            sx={(theme) => ({
+              [theme.breakpoints.up("md")]: {
+                display: "none",
+              },
+            })}
+          >
+            {words.length < target ? (
+              <Notice notice={notice} />
+            ) : (
+              <ShareText setNotice={setNotice} />
             )}
-            <Stack spacing={1}>
-              <Progress />
-              <Words
-                expanded={wordsExpanded || words.length >= WORDS_GOAL}
-                setExpanded={setExpanded}
+          </Box>
+        </TopContainer>
+        <BottomContainer>
+          {!wordsExpanded && words.length < target && (
+            <Stack spacing={0.75}>
+              <Guess
+                guessIndex={guessIndex}
+                setGuessIndex={setGuessIndex}
+                found={found}
+                guess={currentGuess}
               />
             </Stack>
-            {!wordsExpanded && words.length < WORDS_GOAL && (
-              <Keyboard
-                startBackspaceTimer={startBackspaceTimer}
-                submitKey={updateCurrentGuess}
-              />
-            )}
-            <Box
-              sx={(theme) => ({
-                height: "48px",
-                [theme.breakpoints.down("md")]: {
-                  display: "none",
-                },
-              })}
-            >
-              {words.length >= WORDS_GOAL && (
-                <ShareText setNotice={setNotice} />
-              )}
-              <Notice notice={notice} />
-            </Box>
-          </BottomContainer>
-        </InnerContainer>
-      )}
+          )}
+          <Stack spacing={1}>
+            <Progress />
+            <Words
+              expanded={wordsExpanded || words.length >= target}
+              setExpanded={setExpanded}
+            />
+          </Stack>
+          {!wordsExpanded && words.length < target && (
+            <Keyboard
+              startBackspaceTimer={startBackspaceTimer}
+              submitKey={updateCurrentGuess}
+            />
+          )}
+          <Box
+            sx={(theme) => ({
+              height: "48px",
+              [theme.breakpoints.down("md")]: {
+                display: "none",
+              },
+            })}
+          >
+            {words.length >= target && <ShareText setNotice={setNotice} />}
+            <Notice notice={notice} />
+          </Box>
+        </BottomContainer>
+      </InnerContainer>
       {false && <Login setAllowTyping={setAllowTyping} />}
     </AppContainer>
   );

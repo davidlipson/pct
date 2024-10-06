@@ -1,9 +1,10 @@
 import { useEffect, useState, createContext } from "react";
 import { Game } from "./components/Game";
-import { todaysLetters } from "./utils";
+import { LettersOfTheDay, todaysLetters } from "./utils";
 import { LEVELS, WORDS_GOAL } from "./constants";
 import mixpanel from "mixpanel-browser";
 import { Stack, Typography } from "@mui/material";
+import { calculateTarget } from "./utils/calculateTarget";
 
 export interface Word {
   word: string;
@@ -12,7 +13,7 @@ export interface Word {
 
 interface StoredValues {
   words: Word[];
-  letters: string[];
+  letters: LettersOfTheDay;
 }
 
 interface GameContextType extends StoredValues {
@@ -23,7 +24,7 @@ interface GameContextType extends StoredValues {
   currentLevel: number;
   totalWords: number;
   username: string;
-  max: number;
+  target: number;
 }
 
 export const GameContext = createContext<GameContextType>(
@@ -36,8 +37,8 @@ const usernameStoreageId = "pct-username";
 const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [showScreen, setShowScreen] = useState<boolean>(false);
-  const [letters, setLetters] = useState<string[]>(todaysLetters());
-  const [max, setMax] = useState<number>(null);
+  const [letters, setLetters] = useState<LettersOfTheDay>(todaysLetters());
+  const [target, setTarget] = useState<number>(WORDS_GOAL);
   const [words, setWords] = useState<Word[]>([]);
   const [username, setUsername] = useState<string>(
     localStorage.getItem(usernameStoreageId)
@@ -74,9 +75,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    document.title = `Today's Letters: ${letters.join(" ").toUpperCase()}`;
-    //setTotalWords(totalMatchingWords(letters));
-    //setMax(todaysMax(letters));
+    document.title = `Today's Letters: ${letters.letters
+      .join(" ")
+      .toUpperCase()}`;
+    // round totalWords divided by 100 to nearest ten ceiling
+    setTarget(calculateTarget(letters.totalWords));
   }, [letters]);
 
   useEffect(() => {
@@ -86,7 +89,7 @@ const App = () => {
       ) as StoredValues;
 
       // if letters changed on backend, reset words and storage
-      if (letters?.join("") !== storedLetters?.join("")) {
+      if (letters.letters.join("") !== storedLetters?.letters?.join("")) {
         setLoading(true);
         localStorage.setItem(
           localStorageId,
@@ -120,7 +123,7 @@ const App = () => {
       totalWords: words.length,
       letters,
       points: words.reduce((acc, curr) => acc + curr.points, 0),
-      beatGame: words.length >= WORDS_GOAL,
+      beatGame: words.length >= target,
     });
   }, [words]);
 
@@ -156,7 +159,7 @@ const App = () => {
         })}
       >
         <Typography>
-          How many points can you get today in {WORDS_GOAL} words?
+          How many points can you get today in {target} words?
         </Typography>
       </Stack>
     );
@@ -174,7 +177,7 @@ const App = () => {
           validUsername,
           currentLevel,
           totalWords,
-          max,
+          target,
         }}
       >
         <Game />

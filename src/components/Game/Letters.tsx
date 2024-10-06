@@ -21,7 +21,9 @@ const getRandomLetters = (count = 10) => {
 // add animation! jumbling letters
 export const Letters = () => {
   const [animate, setAnimate] = useState(true);
-  const { letters } = useContext(GameContext);
+  const {
+    letters: { letters },
+  } = useContext(GameContext);
 
   useEffect(() => {
     const timeout = setTimeout(() => {

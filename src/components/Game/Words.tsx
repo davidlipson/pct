@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ColourScheme } from "../../constants/colourScheme";
-import { WORDS_GOAL } from "../../constants";
+import { BONUS_LIMIT } from "../../constants";
 
 const WordStack = styled(Stack)(({ theme }) => ({
   maxHeight: "300px",
@@ -32,7 +32,7 @@ export const Words = ({
   expanded: boolean;
   setExpanded: (val: boolean) => void;
 }) => {
-  const { words } = useContext(GameContext);
+  const { words, target } = useContext(GameContext);
   const alphabeticallySorted = words.sort((a, b) => {
     if (a.word < b.word) {
       return -1;
@@ -53,8 +53,8 @@ export const Words = ({
 
   useEffect(() => {
     let total = `You hit today's goal! Now go outside.`;
-    if (words.length < WORDS_GOAL) {
-      total = `${words.length} / ${WORDS_GOAL} words found`;
+    if (words.length < target) {
+      total = `${words.length} / ${target} words found`;
     }
     setText(total);
   }, [words]);
@@ -88,11 +88,7 @@ export const Words = ({
             margin: 0,
           }}
           expandIcon={
-            words.length && words.length < WORDS_GOAL ? (
-              <ExpandMoreIcon />
-            ) : (
-              <></>
-            )
+            words.length && words.length < target ? <ExpandMoreIcon /> : <></>
           }
           aria-controls="panel1-content"
           id="panel1-header"
@@ -110,7 +106,7 @@ export const Words = ({
               <Entry key={index}>
                 <Stack direction="row" spacing={1} alignItems="baseline">
                   <Typography fontWeight={200}>{word}</Typography>
-                  {word === firstWordWithMaxLetters?.word && (
+                  {word === firstWordWithMaxLetters?.word ? (
                     <Typography
                       fontWeight={500}
                       fontSize="12px"
@@ -120,6 +116,18 @@ export const Words = ({
                     >
                       Your best word!
                     </Typography>
+                  ) : word.length > BONUS_LIMIT ? (
+                    <Typography
+                      fontWeight={500}
+                      fontSize="12px"
+                      lineHeight={1.5}
+                      fontStyle="italic"
+                      color={ColourScheme.SUPER}
+                    >
+                      Superword!
+                    </Typography>
+                  ) : (
+                    <></>
                   )}
                 </Stack>
                 <Typography fontWeight={200} fontSize="12px">

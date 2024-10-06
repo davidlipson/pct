@@ -19,34 +19,17 @@ export const allMatchingWords = (
   });
 };
 
-export const totalMatchingWords = (
-  letters: string[],
-  length?: number,
-  excludedWords?: Word[]
-): number => {
-  return allMatchingWords(letters, length, excludedWords).length;
-};
-
-export const remainingWordsByLength = (
-  letters: string[],
-  words: Word[]
-): number[] => {
-  const lengths = Array.from(
-    { length: MAX_LENGTH - MIN_LENGTH + 1 },
-    (_, i) => i + MIN_LENGTH
-  );
-  return lengths.map((length) => totalMatchingWords(letters, length, words));
-};
-
 export const firstMatchingWord = (letters: string[]): string => {
-  return allMatchingWords(letters)[0];
+  return allMatchingWords(letters).find((word) => {
+    return word.length >= MIN_LENGTH && word.length <= 7;
+  });
 };
 
 export const wordWithLettersNotInOrder = (letters: string[]): string => {
   return ALL_WORDS.find((word) => {
     return (
       word.length >= MIN_LENGTH &&
-      word.length <= MAX_LENGTH &&
+      word.length <= 7 &&
       !isSubSequence(letters, word) &&
       word.includes(letters[0][0]) &&
       word.includes(letters[1][0]) &&

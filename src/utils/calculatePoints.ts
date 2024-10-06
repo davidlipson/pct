@@ -1,3 +1,8 @@
+import { BONUS_LIMIT } from "../constants";
+
 export const calculatePoints = (word: string): number => {
-  return word.length - 2;
+  if (word.length <= BONUS_LIMIT) {
+    return word.length;
+  }
+  return word.length * 2;
 };

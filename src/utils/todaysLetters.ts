@@ -3,17 +3,32 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { LETTERS, MIN_WORDS } from "../constants/constants";
 import { allMatchingWords } from "./totalMatchingWords";
-import { calculatePoints } from "./calculatePoints";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+export type LettersOfTheDay = {
+  letters: string[];
+  totalWords: number;
+};
+
+const specialDays = {
+  "09-29": ["p", "c", "t"],
+  "10-08": ["j", "g", "l"],
+  "10-19": ["t", "b", "l"],
+  "12-03": ["j", "m", "l"],
+  "05-11": ["m", "o", "m"],
+  "06-15": ["d", "a", "d"],
+};
+
 // consistent algorithm for generating today's letters
-export const todaysLetters = (): string[] => {
+export const todaysLetters = (): LettersOfTheDay => {
   const timeInToronto = dayjs().tz("America/Toronto");
-  // HBD dad
-  if (timeInToronto.month() === 8 && timeInToronto.date() === 29) {
-    return ["p", "c", "t"];
+
+  const specialDay = specialDays[timeInToronto.format("MM-DD")];
+  if (specialDay) {
+    const totalWords = allMatchingWords(specialDay).length;
+    return { letters: specialDay, totalWords };
   }
 
   let iterOne = 0;
@@ -45,7 +60,10 @@ export const todaysLetters = (): string[] => {
       thirdLetter,
     ]);
     if (totalWords.length >= MIN_WORDS) {
-      return [firstLetter, secondLetter, thirdLetter];
+      return {
+        letters: [firstLetter, secondLetter, thirdLetter],
+        totalWords: totalWords.length,
+      };
     }
     iterOne++;
     iterTwo++;

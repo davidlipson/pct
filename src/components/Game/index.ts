@@ -11,3 +11,4 @@ export * from "./Leaderboard";
 export * from "./Login";
 export * from "./Progress";
 export * from "./ShareText";
+export * from "./Feedback";

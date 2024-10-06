@@ -9,7 +9,12 @@ export const ShareText = ({
 }: {
   setNotice: (notice: string) => void;
 }) => {
-  const { points, letters, words } = useContext(GameContext);
+  const {
+    points,
+    letters: { letters },
+    words,
+    target,
+  } = useContext(GameContext);
   return (
     <Stack width={1} alignItems="center">
       <Box
@@ -24,7 +29,7 @@ export const ShareText = ({
           },
         }}
         onClick={() => {
-          shareOnClick(points, letters, words, setNotice);
+          shareOnClick(points, letters, words, target, setNotice);
         }}
       >
         <Typography textAlign="center" fontWeight={500}>

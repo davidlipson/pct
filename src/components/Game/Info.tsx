@@ -8,33 +8,28 @@ import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { View } from "./Game";
 import mixpanel from "mixpanel-browser";
-import { WORDS_GOAL } from "../../constants";
+import { BONUS_LIMIT } from "../../constants";
 
 export const shareOnClick = async (
   points: number,
   letters: string[],
   words: Word[],
+  target: number,
   setNotice: (notice: string) => void
 ) => {
   let firstLine = `I'm playing PCT!`;
-  const sortedWords = words
-    .sort((a, b) => b.word.length - a.word.length)
-    .slice(0, 3);
 
-  if (words.length >= WORDS_GOAL) {
+  const superWords = words.filter(
+    (word) => word.word.length > BONUS_LIMIT
+  ).length;
+  if (words.length >= target) {
     firstLine = `I beat ${letters
       .map((letter) => letter.toUpperCase())
-      .join(
-        "."
-      )}!\nCheck my top words:\n(Total points: ${points})\n\n${sortedWords
-      .map((word) => word.word[0].toUpperCase() + word.word.slice(1))
-      .join("\n")}`;
+      .join(".")}${
+      superWords > 0 ? ` and found ${superWords} super words!` : "!"
+    }`;
   } else if (points > 0) {
-    firstLine = `Check my top words for ${letters
-      .map((letter) => letter.toUpperCase())
-      .join(".")} so far:\n(Total points: ${points})\n\n${sortedWords
-      .map((word) => word.word[0].toUpperCase() + word.word.slice(1))
-      .join("\n")}`;
+    firstLine = `I'm playing PCT!\nI've found ${superWords} super words so far!`;
   }
 
   const text = `${firstLine}\n\nPlay now!`;
@@ -81,7 +76,12 @@ export const Info = ({
   setView: any;
   setNotice: any;
 }) => {
-  const { words, letters, points } = useContext(GameContext);
+  const {
+    words,
+    letters: { letters },
+    points,
+    target,
+  } = useContext(GameContext);
   return (
     <>
       <Button
@@ -118,7 +118,7 @@ export const Info = ({
           },
         })}
         onClick={async () => {
-          shareOnClick(points, letters, words, setNotice);
+          shareOnClick(points, letters, words, target, setNotice);
         }}
       >
         <SendIcon />

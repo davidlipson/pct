@@ -4,21 +4,22 @@ import { useContext } from "react";
 import { GameContext } from "../../App";
 import { styled } from "@mui/material/styles";
 import "react-circular-progressbar/dist/styles.css";
-import { WORDS_GOAL } from "../../constants";
+import { BONUS_LIMIT } from "../../constants";
 
 type TextProps = {
   small?: boolean;
+  superWord?: boolean;
 };
 
-const Text = styled(Typography)<TextProps>(({ theme, small }) => ({
-  color: ColourScheme.GREEN,
+const Text = styled(Typography)<TextProps>(({ theme, small, superWord }) => ({
+  color: superWord ? ColourScheme.SUPER : ColourScheme.GREEN,
   fontSize: small ? "24px" : "100px",
   fontWeight: 700,
   lineHeight: small ? "24px" : "100px",
 }));
 
 export const Score = ({ found }: { found: number }) => {
-  const { points, max, words } = useContext(GameContext);
+  const { points, words, target } = useContext(GameContext);
   /* const [level, setLevel] = useState(0);
   const [percent, setPercent] = useState(0);
    const [hideBar, setHideBar] = useState(false);
@@ -69,11 +70,10 @@ export const Score = ({ found }: { found: number }) => {
     <Stack direction="row" alignItems="baseline">
       <Stack direction="row">
         <Text>{points}</Text>
-        <Text small>{found ? `+ ${found}` : ""}</Text>
+        <Text small superWord={found > BONUS_LIMIT}>
+          {found ? `+ ${found}` : ""}
+        </Text>
       </Stack>
-      {false && words.length >= WORDS_GOAL && max >= 0 && (
-        <Text small>{`/ ${max}`}</Text>
-      )}
     </Stack>
   );
 
