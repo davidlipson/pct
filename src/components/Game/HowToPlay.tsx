@@ -113,9 +113,10 @@ export const HowToPlay = ({
             <Stack spacing={1}>
               <HeaderText>Scoring</HeaderText>
               <DirectionText>
-                Points are awarded based on the length of each word, and are
-                doubled for words longer than {BONUS_LIMIT} letters.
+                Each letter is worth one point, and points for words longer than{" "}
+                {BONUS_LIMIT} letters will be doubled.
               </DirectionText>
+              <DirectionText>So bring out your biggest words!</DirectionText>
             </Stack>
 
             <Stack spacing={1}>
