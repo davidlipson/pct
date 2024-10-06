@@ -51,52 +51,42 @@ export const HowToPlay = ({
     <Drawer anchor="bottom" open={open} onClose={() => setView(View.GAME)}>
       <Stack alignItems="center" padding="24px">
         <InnerStack spacing={2}>
-          <Stack>
-            <Stack direction="row" width={1} justifyContent="space-between">
-              <Typography
-                fontSize="12px"
-                variant="overline"
-                textAlign="left"
-                onClick={() => {
-                  setView(View.FEEDBACK);
-                }}
-                style={{ cursor: "pointer" }}
-                sx={{
-                  ":hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Send Feedback
-              </Typography>
-              <Typography
-                fontSize="12px"
-                variant="overline"
-                textAlign="right"
-                onClick={() => setView(View.GAME)}
-                style={{ cursor: "pointer" }}
-                sx={{
-                  ":hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Close
-              </Typography>
-            </Stack>
+          <Stack direction="row" width={1} justifyContent="space-between">
             <Typography
-              fontSize="18px"
+              fontSize="12px"
               variant="overline"
-              textAlign="center"
-              width={1}
+              textAlign="left"
+              onClick={() => {
+                setView(View.FEEDBACK);
+              }}
+              style={{ cursor: "pointer" }}
+              sx={{
+                ":hover": {
+                  textDecoration: "underline",
+                },
+              }}
             >
-              How To Play PCT
+              Send Feedback
+            </Typography>
+            <Typography
+              fontSize="12px"
+              variant="overline"
+              textAlign="right"
+              onClick={() => setView(View.GAME)}
+              style={{ cursor: "pointer" }}
+              sx={{
+                ":hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              Close
             </Typography>
           </Stack>
 
           <Stack spacing={3}>
             <Stack direction="column" spacing={1}>
-              <HeaderText>The Basics</HeaderText>
+              <HeaderText>Play PCT</HeaderText>
               <DirectionText>
                 Everyday, you will see three new letters. Today's letters are{" "}
                 <strong>
