@@ -33,7 +33,7 @@ const localStorageId = "pct";
 const usernameStoreageId = "pct-username";
 
 const App = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [showScreen, setShowScreen] = useState<boolean>(false);
   const [letters, setLetters] = useState<LettersOfTheDay>(todaysLetters());
   const [target, setTarget] = useState<number>(WORDS_GOAL);
@@ -76,7 +76,7 @@ const App = () => {
 
       // if letters changed on backend, reset words and storage
       if (letters.letters.join("") !== storedLetters?.letters?.join("")) {
-        //setLoading(true);
+        setLoading(true);
         localStorage.setItem(
           localStorageId,
           JSON.stringify({ words: [], letters })
@@ -96,7 +96,7 @@ const App = () => {
       setTimeout(() => {
         setShowScreen(true);
         setLoading(false);
-      }, 2000);
+      }, 1500);
     }
   }, [loading]);
 

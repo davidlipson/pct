@@ -16,16 +16,17 @@ export const shareOnClick = async (
   target: number,
   setNotice: (notice: string) => void
 ) => {
-  let firstLine = `I'm playing PCT!`;
+  let firstLine = `I'm playing PCT!\n`;
+
   if (words.length >= target) {
     firstLine = `I beat ${letters
       .map((letter) => letter.toUpperCase())
-      .join(".")} with ${points} points!`;
-  } else if (points > 0) {
-    firstLine = `I'm playing PCT!\nI have ${points} points in ${words.length} words so far!`;
+      .join(".")}!\n`;
   }
+  const secondLine =
+    words.length > 0 ? `${points} points / ${words.length} words\n` : "";
 
-  const text = `${firstLine}\n\nPlay now!`;
+  const text = `${firstLine}${secondLine}\nPlay now!`;
   try {
     const data = {
       url: `${url}?share=true`,

@@ -7,4 +7,4 @@ export const BONUS_LIMIT = 10;
 export const MIN_WORDS = 1000;
 export const MAX_WORDS = 10000;
 export const WORDS_GOAL = 20;
-export const LEVEL_NAMES = ["PARTICIPANT", "SPECIALIST", "PERFECTIONIST"];
+export const LEVEL_NAMES = ["PERCEPTIVE", "SPECIALIST", "PERFECTIONIST"];

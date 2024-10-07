@@ -48,7 +48,7 @@ const generateResult = (
 
 // consistent algorithm for generating today's letters
 export const todaysLetters = (): LettersOfTheDay => {
-  const timeInToronto = dayjs().tz("America/Toronto").add(1, "day");
+  const timeInToronto = dayjs().tz("America/Toronto");
 
   const specialDay = specialDays[timeInToronto.format("MM-DD")];
   if (specialDay) {
