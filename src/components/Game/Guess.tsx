@@ -35,7 +35,7 @@ const LetterText = styled(Typography)<{
   bonusLetter: boolean;
 }>(({ theme, example, bonusLetter }) => ({
   textAlign: "center",
-  fontWeight: 200,
+  fontWeight: 400,
   fontSize: example ? "14px" : "30px",
   color: bonusLetter ? ColourScheme.SUPER : ColourScheme.BLACK,
   [theme.breakpoints.down("sm")]: {
