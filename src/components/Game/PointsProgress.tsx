@@ -92,7 +92,7 @@ const LevelComplete = ({
           ? `You're ${levelNumber === 0 ? "" : "a"} ${
               LEVEL_NAMES[levelNumber]
             }!`
-          : `${max - points} points to ${LEVEL_NAMES[levelNumber]}!`
+          : `${max - points} pts to ${LEVEL_NAMES[levelNumber]}!`
       }
     >
       <Stack
