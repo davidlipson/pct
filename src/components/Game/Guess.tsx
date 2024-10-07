@@ -85,7 +85,9 @@ export const Guess = ({
         <Letter
           key={`${index}-${letter}-${example}`}
           example={example}
-          onClick={() => index <= guess.length && setGuessIndex(index)}
+          onClick={() =>
+            index <= guess.length && !example && setGuessIndex(index)
+          }
           bonusLetter={index >= BONUS_LIMIT && letter !== " "}
           specialLetter={letters.includes(letter.toLowerCase())}
           sx={{

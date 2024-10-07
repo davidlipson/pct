@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GameContext } from "../../App";
 import { ColourScheme, LEVEL_NAMES } from "../../constants";
 import { Box, Stack, Tooltip } from "@mui/material";
@@ -70,13 +70,23 @@ const LevelComplete = ({
     points,
     letters: { levels },
   } = useContext(GameContext);
+  const [open, setOpen] = useState(false);
   const name = `glowing-${levelNumber}`;
 
   const level = levels[levelNumber];
   const max = level;
 
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => {
+        setOpen(false);
+      }, 1500);
+    }
+  }, [open]);
+
   return (
     <Tooltip
+      open={open}
       title={
         points >= max
           ? `You're ${levelNumber === 0 ? "" : "a"} ${
@@ -86,6 +96,7 @@ const LevelComplete = ({
       }
     >
       <Stack
+        onClick={() => setOpen((prev) => !prev)}
         sx={{
           cursor: "pointer",
           width: "35px",

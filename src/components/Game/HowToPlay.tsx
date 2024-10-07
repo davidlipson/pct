@@ -113,8 +113,8 @@ export const HowToPlay = ({
                 of the letters provided.
               </DirectionText>
               <DirectionText>
-                Hover or click on each square in the score bar to see how many
-                points to the next level.
+                Click on each square in the score bar to see how many points to
+                the next level.
               </DirectionText>
               <PointsProgress filled />
             </Stack>
