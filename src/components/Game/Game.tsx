@@ -289,7 +289,7 @@ export const Game = () => {
       <InnerContainer>
         <TopContainer>
           <Score found={found} currentGuess={currentGuess} />
-          <PointsProgress />
+          <PointsProgress found={found} currentGuess={currentGuess} />
           <Letters />
           <Box
             sx={(theme) => ({

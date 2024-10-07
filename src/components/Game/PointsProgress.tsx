@@ -2,15 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import { GameContext } from "../../App";
 import { ColourScheme, LEVEL_NAMES } from "../../constants";
 import { Box, Stack, Tooltip } from "@mui/material";
+import { calculatePoints } from "../../utils";
 
 const Section = ({
   colour,
   levelNumber,
   filled,
+  currentGuess,
+  found,
 }: {
   levelNumber: number;
   colour: string;
   filled?: boolean;
+  currentGuess: string;
+  found: number;
 }) => {
   const {
     words,
@@ -24,7 +29,11 @@ const Section = ({
   const max = level;
 
   const bars = new Array(max - min).fill(0).map((_, i) => {
-    return points > i + min;
+    return points > i + min
+      ? 1
+      : !found && points + calculatePoints(currentGuess || "") > i + min
+      ? 2
+      : 0;
   });
 
   return (
@@ -34,14 +43,15 @@ const Section = ({
           sx={{
             height: "2px",
             width: "100%",
-            backgroundColor: ColourScheme.GREY,
+            backgroundColor:
+              bar === 2 ? ColourScheme.DARK_GREY : ColourScheme.GREY,
             [`@keyframes ${name}`]: {
               to: {
                 backgroundColor: colour,
               },
             },
             animation:
-              bar || filled
+              bar === 1 || filled
                 ? `${name} 0.05s ${
                     0.05 *
                     (filled
@@ -61,10 +71,14 @@ const LevelComplete = ({
   levelNumber,
   colour,
   filled,
+  currentGuess,
+  found,
 }: {
   colour: string;
   levelNumber: number;
   filled?: boolean;
+  currentGuess: string;
+  found: number;
 }) => {
   const {
     points,
@@ -101,9 +115,18 @@ const LevelComplete = ({
           cursor: "pointer",
           width: "35px",
           height: "10px",
-          backgroundColor: points >= max || filled ? colour : ColourScheme.GREY,
+          backgroundColor:
+            points >= max || filled
+              ? colour
+              : !found && points + calculatePoints(currentGuess) >= max
+              ? ColourScheme.DARK_GREY
+              : ColourScheme.GREY,
           border: `1px solid ${
-            points >= max || filled ? colour : ColourScheme.GREY
+            points >= max || filled
+              ? colour
+              : !found && points + calculatePoints(currentGuess) >= max
+              ? ColourScheme.DARK_GREY
+              : ColourScheme.GREY
           }`,
           animation:
             points >= max || filled ? `${name} 1300ms infinite` : "none",
@@ -124,33 +147,57 @@ const LevelComplete = ({
   );
 };
 
-export const PointsProgress = ({ filled }: { filled?: boolean }) => {
+export const PointsProgress = ({
+  filled,
+  currentGuess = "",
+  found = 1,
+}: {
+  filled?: boolean;
+  currentGuess?: string;
+  found?: number;
+}) => {
   return (
     <Stack direction="row" width={1} spacing={1} alignItems="center">
       <Section
         filled={filled}
         levelNumber={0}
+        currentGuess={currentGuess}
+        found={found}
         colour={ColourScheme.GOOD_GREEN}
       />
       <LevelComplete
         filled={filled}
         levelNumber={0}
+        currentGuess={currentGuess}
+        found={found}
         colour={ColourScheme.GOOD_GREEN}
       />
       <Section
         filled={filled}
         levelNumber={1}
+        currentGuess={currentGuess}
+        found={found}
         colour={ColourScheme.GREAT_GREEN}
       />
       <LevelComplete
         filled={filled}
         levelNumber={1}
+        currentGuess={currentGuess}
+        found={found}
         colour={ColourScheme.GREAT_GREEN}
       />
-      <Section filled={filled} levelNumber={2} colour={ColourScheme.GREEN} />
-      <LevelComplete
+      <Section
+        currentGuess={currentGuess}
         filled={filled}
         levelNumber={2}
+        found={found}
+        colour={ColourScheme.GREEN}
+      />
+      <LevelComplete
+        currentGuess={currentGuess}
+        filled={filled}
+        levelNumber={2}
+        found={found}
         colour={ColourScheme.GREEN}
       />
     </Stack>
