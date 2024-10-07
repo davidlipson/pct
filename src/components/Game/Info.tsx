@@ -8,7 +8,6 @@ import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { View } from "./Game";
 import mixpanel from "mixpanel-browser";
-import { BONUS_LIMIT } from "../../constants";
 
 export const shareOnClick = async (
   points: number,
@@ -17,22 +16,17 @@ export const shareOnClick = async (
   target: number,
   setNotice: (notice: string) => void
 ) => {
-  let firstLine = `I'm playing PCT!`;
+  let firstLine = `I'm playing PCT!\n`;
 
-  const superWords = words.filter(
-    (word) => word.word.length > BONUS_LIMIT
-  ).length;
   if (words.length >= target) {
     firstLine = `I beat ${letters
       .map((letter) => letter.toUpperCase())
-      .join(".")}${
-      superWords > 0 ? ` and found ${superWords} super words!` : "!"
-    }`;
-  } else if (points > 0) {
-    firstLine = `I'm playing PCT!\nI've found ${superWords} super words so far!`;
+      .join(".")}!\n`;
   }
+  const secondLine =
+    words.length > 0 ? `${points} points / ${words.length} words\n` : "";
 
-  const text = `${firstLine}\n\nPlay now!`;
+  const text = `${firstLine}${secondLine}\nPlay now!`;
   try {
     const data = {
       url: `${url}?share=true`,
@@ -46,12 +40,16 @@ export const shareOnClick = async (
         window.location.href = url;
       }, 2000);
     }
-    mixpanel.track("Share button clicked.", {
-      words,
-      letters,
-      points,
-      usedShare: navigator.canShare(data),
-    });
+    try {
+      mixpanel.track("Share button clicked.", {
+        words,
+        letters,
+        points,
+        usedShare: navigator.canShare(data),
+      });
+    } catch (e) {
+      console.error("Error sharing", e);
+    }
   } catch (e) {
     console.error("Error sharing", e);
   }

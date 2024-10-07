@@ -39,16 +39,21 @@ export const Progress = () => {
   });
 
   return (
-    <Stack width={1} direction="row" spacing={0.3}>
+    <Stack
+      width={1}
+      direction="row"
+      spacing={0.3}
+      justifyContent="space-between"
+    >
       {bars.map((bar) => (
         <Box
           sx={{
             height: "10px",
-            width: "100%",
+            width: "10px",
             backgroundColor: bar ? ColourScheme.GOOD_GREEN : ColourScheme.WHITE,
             border: bar
-              ? `0.5px solid ${ColourScheme.GOOD_GREEN}`
-              : `0.5px solid ${ColourScheme.GREY}`,
+              ? `1px solid ${ColourScheme.GOOD_GREEN}`
+              : `1px solid ${ColourScheme.GREY}`,
           }}
         ></Box>
       ))}

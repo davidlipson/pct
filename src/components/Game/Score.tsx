@@ -5,6 +5,7 @@ import { GameContext } from "../../App";
 import { styled } from "@mui/material/styles";
 import "react-circular-progressbar/dist/styles.css";
 import { BONUS_LIMIT } from "../../constants";
+import { calculatePoints } from "../../utils";
 
 type TextProps = {
   small?: boolean;
@@ -13,119 +14,42 @@ type TextProps = {
 
 const Text = styled(Typography)<TextProps>(({ theme, small, superWord }) => ({
   color: superWord ? ColourScheme.SUPER : ColourScheme.GREEN,
-  fontSize: small ? "24px" : "100px",
+  fontSize: small ? "20px" : "100px",
   fontWeight: 700,
-  lineHeight: small ? "24px" : "100px",
+  lineHeight: small ? "20px" : "100px",
 }));
 
-export const Score = ({ found }: { found: number }) => {
+export const Score = ({
+  found,
+  currentGuess,
+}: {
+  found: number;
+  currentGuess: string;
+}) => {
   const { points, words, target } = useContext(GameContext);
-  /* const [level, setLevel] = useState(0);
-  const [percent, setPercent] = useState(0);
-   const [hideBar, setHideBar] = useState(false);
-  const [animateText, setAnimateText] = useState(false);
-
-  const getPercent = (lvl: number, pts: number) => {
-    let percent = 100;
-    if (lvl < LEVELS.length - 1) {
-      percent = ((pts - LEVELS[lvl]) / (LEVELS[lvl + 1] - LEVELS[lvl])) * 100;
-    }
-    return Math.max(1, percent);
-  };
-
-  useEffect(() => {
-    // find highest level less than points
-    const nextPercent = getPercent(currentLevel, points);
-    if (
-      points > 0 &&
-      currentLevel > level &&
-      currentLevel < LEVELS.length - 1
-    ) {
-      // set showPoints to the level points briefly and then to the actual points
-      setPercent(100);
-      setTimeout(() => {
-        setHideBar(true);
-        setPercent(nextPercent);
-        setLevel(currentLevel);
-      }, 1000);
-      setTimeout(() => {
-        setHideBar(false);
-      }, 1000);
-    } else {
-      setLevel(currentLevel);
-      setPercent(nextPercent);
-    }
-  }, [points]);
-
-  useEffect(() => {
-    if (percent === 100) {
-      setAnimateText(true);
-      setTimeout(() => {
-        setAnimateText(false);
-      }, 1000);
-    }
-  }, [percent]);*/
-
   return (
     <Stack direction="row" alignItems="baseline">
       <Stack direction="row">
         <Text>{points}</Text>
-        <Text small superWord={found > BONUS_LIMIT}>
-          {found ? `+ ${found}` : ""}
+        <Text
+          sx={{
+            "@keyframes fadeCurrentIn": {
+              "0%": {
+                opacity: 0,
+              },
+              "100%": {
+                opacity: 1,
+              },
+            },
+            animation:
+              currentGuess.length > 0 ? "fadeCurrentIn 0.3s forwards" : "none",
+          }}
+          small
+          superWord={currentGuess.length > BONUS_LIMIT}
+        >
+          {currentGuess.length > 0 && `+${calculatePoints(currentGuess)}`}
         </Text>
       </Stack>
     </Stack>
   );
-
-  /*
-  return (
-    <Container
-      sx={{
-        // fade in on load
-        animation: "fadeIn 2s forwards",
-        "@keyframes fadeIn": {
-          "0%": {
-            opacity: 0,
-          },
-          "100%": {
-            opacity: 1,
-          },
-        },
-      }}
-    >
-      <CircularProgressbar
-        background={currentLevel === LEVELS.length - 1}
-        styles={{
-          root: { width: "200px" },
-          text: {
-            fontSize: "20px",
-            fontWeight: 700,
-            fill: ColourScheme.GREEN,
-            textAnchor: "middle",
-            dominantBaseline: "central",
-          },
-          trail: {
-            display: "none",
-          },
-          path: {
-            display: hideBar ? "none" : "block",
-            strokeLinecap: "butt",
-            strokeWidth: "3px",
-            transition: "stroke-dashoffset 0.5s ease 0s",
-            stroke:
-              percent < 33
-                ? ColourScheme.GOOD_GREEN
-                : percent < 66
-                ? ColourScheme.GREAT_GREEN
-                : ColourScheme.GREEN,
-          },
-          background: {
-            fill: ColourScheme.GOOD_GREEN,
-          },
-        }}
-        value={percent}
-        text={`${points}`}
-      />
-    </Container>
-  );*/
 };

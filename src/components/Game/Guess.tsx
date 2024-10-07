@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { GameContext } from "../../App";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ColourScheme } from "../../constants/colourScheme";
 import { BONUS_LIMIT, MAX_LENGTH, SHOW_CHARS } from "../../constants";
@@ -16,7 +16,6 @@ const Letter = styled(Stack)<{
   cursor: "pointer",
   justifyContent: "center",
   width: example ? "30px" : "60px",
-  fontSize: example ? "15px" : "30px",
   border: `1px solid ${
     bonusLetter
       ? ColourScheme.SUPER
@@ -28,7 +27,19 @@ const Letter = styled(Stack)<{
   [theme.breakpoints.down("sm")]: {
     width: example ? "30px" : "100%",
     height: example ? "30px" : "40px",
-    fontSize: example ? "15px" : "16px",
+  },
+}));
+
+const LetterText = styled(Typography)<{
+  example: boolean;
+  bonusLetter: boolean;
+}>(({ theme, example, bonusLetter }) => ({
+  textAlign: "center",
+  fontWeight: 400,
+  fontSize: example ? "14px" : "30px",
+  color: bonusLetter ? ColourScheme.SUPER : ColourScheme.BLACK,
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "14px",
   },
 }));
 
@@ -74,8 +85,10 @@ export const Guess = ({
         <Letter
           key={`${index}-${letter}-${example}`}
           example={example}
-          onClick={() => index <= guess.length && setGuessIndex(index)}
-          bonusLetter={index > BONUS_LIMIT && letter !== " "}
+          onClick={() =>
+            index <= guess.length && !example && setGuessIndex(index)
+          }
+          bonusLetter={index >= BONUS_LIMIT && letter !== " "}
           specialLetter={letters.includes(letter.toLowerCase())}
           sx={{
             backgroundColor:
@@ -129,14 +142,38 @@ export const Guess = ({
                 ? guess.length > BONUS_LIMIT
                   ? `wooSuper 1s infinite `
                   : `woo 1s infinite`
-                : index > BONUS_LIMIT && letter !== " "
+                : index >= BONUS_LIMIT && letter !== " "
                 ? "rocking 0.5s infinite"
                 : "none"
               : "none",
             animationIterationCount: found === null ? "infinite" : 1,
           }}
         >
-          {letter.toUpperCase()}
+          {found === null && index >= BONUS_LIMIT && letter !== " " && (
+            <Typography
+              sx={(theme) => ({
+                display: "block",
+                position: "fixed",
+                fontSize: "10px",
+                top: "0px",
+                right: "4px",
+                color: ColourScheme.SUPER,
+                [theme.breakpoints.down("sm")]: {
+                  top: "-12px",
+                  right: "0px",
+                  fontSize: "8px",
+                },
+              })}
+            >
+              x2
+            </Typography>
+          )}
+          <LetterText
+            example={example}
+            bonusLetter={index >= BONUS_LIMIT && letter !== " "}
+          >
+            {letter.toUpperCase()}
+          </LetterText>
         </Letter>
       ))}
     </GuessStack>

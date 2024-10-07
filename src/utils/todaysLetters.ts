@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { LETTERS, MIN_WORDS } from "../constants/constants";
+import { LETTERS, MIN_WORDS, WORDS_GOAL } from "../constants/constants";
 import { allMatchingWords } from "./totalMatchingWords";
+import { calculatePoints } from "./calculatePoints";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -10,6 +11,7 @@ dayjs.extend(timezone);
 export type LettersOfTheDay = {
   letters: string[];
   totalWords: number;
+  levels: number[];
 };
 
 const specialDays = {
@@ -21,14 +23,37 @@ const specialDays = {
   "06-15": ["d", "a", "d"],
 };
 
+const generateResult = (
+  letters: string[],
+  totalWords: string[]
+): LettersOfTheDay => {
+  const totalScore = totalWords.reduce(
+    (acc, word) => acc + calculatePoints(word),
+    0
+  );
+  const averageWordScore = totalScore / totalWords.length;
+  const averageTargetScore = WORDS_GOAL * averageWordScore * 0.5;
+  const levels = [
+    averageTargetScore / 3,
+    (2 * averageTargetScore) / 3,
+    averageTargetScore,
+  ];
+
+  return {
+    letters,
+    totalWords: totalWords.length,
+    levels: levels.map((level) => Math.ceil(level / 10) * 10),
+  };
+};
+
 // consistent algorithm for generating today's letters
 export const todaysLetters = (): LettersOfTheDay => {
   const timeInToronto = dayjs().tz("America/Toronto");
 
   const specialDay = specialDays[timeInToronto.format("MM-DD")];
   if (specialDay) {
-    const totalWords = allMatchingWords(specialDay).length;
-    return { letters: specialDay, totalWords };
+    const totalWords = allMatchingWords(specialDay);
+    return generateResult(specialDay, totalWords);
   }
 
   let iterOne = 0;
@@ -60,10 +85,10 @@ export const todaysLetters = (): LettersOfTheDay => {
       thirdLetter,
     ]);
     if (totalWords.length >= MIN_WORDS) {
-      return {
-        letters: [firstLetter, secondLetter, thirdLetter],
-        totalWords: totalWords.length,
-      };
+      return generateResult(
+        [firstLetter, secondLetter, thirdLetter],
+        totalWords
+      );
     }
     iterOne++;
     iterTwo++;

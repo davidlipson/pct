@@ -9,8 +9,10 @@ import {
   wordWithLettersNotInOrder,
 } from "../../utils";
 import { Guess } from "./Guess";
-import { BONUS_LIMIT } from "../../constants";
+import { BONUS_LIMIT, ColourScheme, LEVEL_NAMES } from "../../constants";
 import { View } from "./Game";
+import { PointsProgress } from "./PointsProgress";
+import CloseIcon from "@mui/icons-material/Close";
 
 const InnerStack = styled(Stack)(({ theme }) => ({
   backgroundColor: "white",
@@ -59,29 +61,14 @@ export const HowToPlay = ({
               onClick={() => {
                 setView(View.FEEDBACK);
               }}
-              style={{ cursor: "pointer" }}
-              sx={{
-                ":hover": {
-                  textDecoration: "underline",
-                },
-              }}
+              style={{ cursor: "pointer", textDecoration: "underline" }}
             >
               Send Feedback
             </Typography>
-            <Typography
-              fontSize="12px"
-              variant="overline"
-              textAlign="right"
-              onClick={() => setView(View.GAME)}
+            <CloseIcon
               style={{ cursor: "pointer" }}
-              sx={{
-                ":hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              Close
-            </Typography>
+              onClick={() => setView(View.GAME)}
+            />
           </Stack>
 
           <Stack spacing={3}>
@@ -113,39 +100,67 @@ export const HowToPlay = ({
             <Stack spacing={1}>
               <HeaderText>Scoring</HeaderText>
               <DirectionText>
-                Each letter is worth one point, and points for words longer than{" "}
-                {BONUS_LIMIT} letters will be doubled.
+                Each letter is worth one point, and words longer than{" "}
+                {BONUS_LIMIT} letters will receive 2 points for every additional
+                letter.
               </DirectionText>
-              <DirectionText>So bring out your biggest words!</DirectionText>
+              <DirectionText>
+                There are three levels: {LEVEL_NAMES.slice(0, 2).join(", ")} and{" "}
+                {LEVEL_NAMES[2]}.
+              </DirectionText>
+              <DirectionText>
+                Every day these levels will change depending on the difficulty
+                of the letters provided.
+              </DirectionText>
+              <DirectionText>
+                Click on each square in the score bar to see how many points to
+                the next level.
+              </DirectionText>
+              <PointsProgress filled />
             </Stack>
 
             <Stack spacing={1}>
               <HeaderText>For Example</HeaderText>
-              <Guess guess={validWord} example />
-              <DirectionText>
-                is a valid word worth <strong>{validPoints} points</strong>{" "}
-                (there's a freeby!)
-              </DirectionText>
-              <Guess guess={invalidWord} example />
-              <DirectionText>
-                is not because{" "}
-                <strong>
-                  {letters.map((letter) => letter.toUpperCase()).join(", ")}
-                </strong>{" "}
-                are not found in the correct order.
-              </DirectionText>
+              <Stack
+                sx={(theme) => ({
+                  [theme.breakpoints.down("md")]: {
+                    flexDirection: "column",
+                    gap: "12px",
+                  },
+                  flexDirection: "row",
+                })}
+                justifyContent="space-between"
+              >
+                <Stack spacing={1}>
+                  <Guess guess={validWord} example />
+                  <DirectionText>
+                    is a valid word worth <strong>{validPoints} points</strong>{" "}
+                    (there's a freeby!)
+                  </DirectionText>
+                </Stack>
+                <Stack spacing={1}>
+                  <Guess guess={invalidWord} example />
+                  <DirectionText>
+                    is not because{" "}
+                    <strong>
+                      {letters.map((letter) => letter.toUpperCase()).join(", ")}
+                    </strong>{" "}
+                    are not found in the correct order.
+                  </DirectionText>
+                </Stack>
+              </Stack>
             </Stack>
 
             <Stack spacing={1}>
               <HeaderText>Enjoy!</HeaderText>
 
-              <DirectionText>
+              <DirectionText
+                sx={{
+                  fontSize: "12px",
+                }}
+              >
                 PCT was created by Earl Lipson to play on long car rides with
-                friends and family.
-              </DirectionText>
-              <DirectionText>
-                The digital version of the game is developed and maintained by
-                David Lipson.
+                friends and family, and developed for the web by David Lipson.
               </DirectionText>
             </Stack>
           </Stack>

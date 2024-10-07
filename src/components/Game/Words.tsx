@@ -32,7 +32,12 @@ export const Words = ({
   expanded: boolean;
   setExpanded: (val: boolean) => void;
 }) => {
-  const { words, target } = useContext(GameContext);
+  const {
+    words,
+    target,
+    points,
+    letters: { levels },
+  } = useContext(GameContext);
   const alphabeticallySorted = words.sort((a, b) => {
     if (a.word < b.word) {
       return -1;
@@ -64,7 +69,6 @@ export const Words = ({
     isExpanded: boolean
   ) => {
     setExpanded(isExpanded);
-    console.log(`Accordion is now ${isExpanded ? "open" : "closed"}`);
   };
 
   return (

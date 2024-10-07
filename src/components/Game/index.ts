@@ -12,3 +12,4 @@ export * from "./Login";
 export * from "./Progress";
 export * from "./ShareText";
 export * from "./Feedback";
+export * from "./PointsProgress";

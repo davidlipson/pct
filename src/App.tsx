@@ -1,10 +1,9 @@
 import { useEffect, useState, createContext } from "react";
 import { Game } from "./components/Game";
 import { LettersOfTheDay, todaysLetters } from "./utils";
-import { LEVELS, WORDS_GOAL } from "./constants";
+import { WORDS_GOAL } from "./constants";
 import mixpanel from "mixpanel-browser";
 import { Stack, Typography } from "@mui/material";
-import { calculateTarget } from "./utils/calculateTarget";
 
 export interface Word {
   word: string;
@@ -21,7 +20,6 @@ interface GameContextType extends StoredValues {
   addWord: (word: string, points: number) => void;
   updateUsername: (name: string) => void;
   validUsername: (name: string) => boolean;
-  currentLevel: number;
   totalWords: number;
   username: string;
   target: number;
@@ -35,7 +33,7 @@ const localStorageId = "pct";
 const usernameStoreageId = "pct-username";
 
 const App = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [showScreen, setShowScreen] = useState<boolean>(false);
   const [letters, setLetters] = useState<LettersOfTheDay>(todaysLetters());
   const [target, setTarget] = useState<number>(WORDS_GOAL);
@@ -64,22 +62,10 @@ const App = () => {
     }
   };
 
-  const getCurrentLevel = (points: number): number => {
-    let current = 0;
-    for (let i = 0; i < LEVELS.length; i++) {
-      if (points >= LEVELS[i]) {
-        current = i;
-      }
-    }
-    return current;
-  };
-
   useEffect(() => {
     document.title = `Today's Letters: ${letters.letters
       .join(" ")
       .toUpperCase()}`;
-    // round totalWords divided by 100 to nearest ten ceiling
-    setTarget(calculateTarget(letters.totalWords));
   }, [letters]);
 
   useEffect(() => {
@@ -110,7 +96,7 @@ const App = () => {
       setTimeout(() => {
         setShowScreen(true);
         setLoading(false);
-      }, 2000);
+      }, 1500);
     }
   }, [loading]);
 
@@ -119,16 +105,19 @@ const App = () => {
       return;
     }
     localStorage.setItem(localStorageId, JSON.stringify({ words, letters }));
-    mixpanel.track("Someone is playing.", {
-      totalWords: words.length,
-      letters,
-      points: words.reduce((acc, curr) => acc + curr.points, 0),
-      beatGame: words.length >= target,
-    });
+    try {
+      mixpanel.track("Someone is playing.", {
+        totalWords: words.length,
+        letters,
+        points: words.reduce((acc, curr) => acc + curr.points, 0),
+        beatGame: words.length >= target,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }, [words]);
 
   const points = words.reduce((acc, curr) => acc + curr.points, 0);
-  const currentLevel = getCurrentLevel(points);
 
   if (loading) {
     return (
@@ -175,7 +164,6 @@ const App = () => {
           addWord,
           updateUsername,
           validUsername,
-          currentLevel,
           totalWords,
           target,
         }}
