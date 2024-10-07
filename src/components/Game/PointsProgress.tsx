@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { GameContext } from "../../App";
 import { ColourScheme, LEVEL_NAMES } from "../../constants";
-import { Box, Stack, Tooltip } from "@mui/material";
+import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { calculatePoints } from "../../utils";
 
 const Section = ({
@@ -102,11 +102,21 @@ const LevelComplete = ({
     <Tooltip
       open={open}
       title={
-        points >= max
-          ? `You're ${levelNumber === 0 ? "" : "a"} ${
-              LEVEL_NAMES[levelNumber]
-            }!`
-          : `${max - points} pts to ${LEVEL_NAMES[levelNumber]}!`
+        <Stack width="100px" spacing={0}>
+          <Typography
+            sx={{ textDecoration: "underline" }}
+            fontSize="11px"
+            width={1}
+            textAlign="center"
+          >
+            {LEVEL_NAMES[levelNumber]}
+          </Typography>
+          <Typography fontSize="11px" width={1} textAlign="center">
+            {points >= max
+              ? `${max} points reached!`
+              : `${max - points} points away!`}
+          </Typography>
+        </Stack>
       }
     >
       <Stack

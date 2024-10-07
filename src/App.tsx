@@ -63,12 +63,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    document.title = `Today's Letters: ${letters.letters
-      .join(" ")
-      .toUpperCase()}`;
-  }, [letters]);
-
-  useEffect(() => {
     try {
       const { words: storedWords, letters: storedLetters } = JSON.parse(
         localStorage.getItem(localStorageId) || "{}"
