@@ -88,8 +88,8 @@ const LevelComplete = ({
       <Stack
         sx={{
           cursor: "pointer",
-          width: "25px",
-          height: "7px",
+          width: "35px",
+          height: "10px",
           backgroundColor: points >= max || filled ? colour : ColourScheme.GREY,
           border: `1px solid ${
             points >= max || filled ? colour : ColourScheme.GREY
