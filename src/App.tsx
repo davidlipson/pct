@@ -1,10 +1,9 @@
 import { useEffect, useState, createContext } from "react";
 import { Game } from "./components/Game";
 import { LettersOfTheDay, todaysLetters } from "./utils";
-import { LEVELS, WORDS_GOAL } from "./constants";
+import { WORDS_GOAL } from "./constants";
 import mixpanel from "mixpanel-browser";
 import { Stack, Typography } from "@mui/material";
-import { calculateTarget } from "./utils/calculateTarget";
 
 export interface Word {
   word: string;
@@ -21,7 +20,6 @@ interface GameContextType extends StoredValues {
   addWord: (word: string, points: number) => void;
   updateUsername: (name: string) => void;
   validUsername: (name: string) => boolean;
-  currentLevel: number;
   totalWords: number;
   username: string;
   target: number;
@@ -64,22 +62,10 @@ const App = () => {
     }
   };
 
-  const getCurrentLevel = (points: number): number => {
-    let current = 0;
-    for (let i = 0; i < LEVELS.length; i++) {
-      if (points >= LEVELS[i]) {
-        current = i;
-      }
-    }
-    return current;
-  };
-
   useEffect(() => {
     document.title = `Today's Letters: ${letters.letters
       .join(" ")
       .toUpperCase()}`;
-    // round totalWords divided by 100 to nearest ten ceiling
-    setTarget(calculateTarget(letters.totalWords));
   }, [letters]);
 
   useEffect(() => {
@@ -90,7 +76,7 @@ const App = () => {
 
       // if letters changed on backend, reset words and storage
       if (letters.letters.join("") !== storedLetters?.letters?.join("")) {
-        setLoading(true);
+        //setLoading(true);
         localStorage.setItem(
           localStorageId,
           JSON.stringify({ words: [], letters })
@@ -128,7 +114,6 @@ const App = () => {
   }, [words]);
 
   const points = words.reduce((acc, curr) => acc + curr.points, 0);
-  const currentLevel = getCurrentLevel(points);
 
   if (loading) {
     return (
@@ -175,7 +160,6 @@ const App = () => {
           addWord,
           updateUsername,
           validUsername,
-          currentLevel,
           totalWords,
           target,
         }}

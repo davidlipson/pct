@@ -12,13 +12,13 @@ import {
   Progress,
   ShareText,
   Feedback,
+  PointsProgress,
 } from ".";
 import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/material";
 import { calculatePoints, isSubSequence } from "../../utils";
 import { GameContext } from "../../App";
 import { ALL_WORDS, MAX_LENGTH, MIN_LENGTH } from "../../constants";
-import mixpanel from "mixpanel-browser";
 
 export enum View {
   GAME = "GAME",
@@ -288,8 +288,8 @@ export const Game = () => {
       />
       <InnerContainer>
         <TopContainer>
-          <Score found={found} />
-
+          <Score found={found} currentGuess={currentGuess} />
+          <PointsProgress />
           <Letters />
           <Box
             sx={(theme) => ({
@@ -317,7 +317,6 @@ export const Game = () => {
             </Stack>
           )}
           <Stack spacing={1}>
-            <Progress />
             <Words
               expanded={wordsExpanded || words.length >= target}
               setExpanded={setExpanded}

@@ -1,9 +1,11 @@
 export enum ColourScheme {
   RED = "rgb(226, 0, 88)",
-  ORANGE = "rgb(251, 201, 118)",
+  ORANGE = "#ff9191",
+  YELLOW = "#ffeca5",
   GREEN = "#77e39c",
   GOOD_GREEN = "#c6fad8",
   GREAT_GREEN = "#8FF1B1",
+  FADED_BLUE = "#d0f5f7",
   BLUE = "#b69eff",
   GREY = "rgb(243, 243, 243)",
   DARK_GREY = "rgb(180, 180, 180)",

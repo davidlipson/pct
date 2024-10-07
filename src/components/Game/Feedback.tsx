@@ -8,6 +8,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import { ColourScheme } from "../../constants";
+import CloseIcon from "@mui/icons-material/Close";
 
 import mixpanel from "mixpanel-browser";
 
@@ -45,22 +46,8 @@ export const Feedback = ({
       <Stack alignItems="center" padding="20px 24px 48px 24px">
         <InnerStack spacing={2}>
           <Stack>
-            <Stack direction="row" width={1}>
-              <Typography
-                width={1}
-                fontSize="12px"
-                variant="overline"
-                textAlign="right"
-                onClick={onClose}
-                style={{ cursor: "pointer" }}
-                sx={{
-                  ":hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Close
-              </Typography>
+            <Stack direction="row" width={1} justifyContent="end">
+              <CloseIcon style={{ cursor: "pointer" }} onClick={onClose} />
             </Stack>
             <Typography
               fontSize="18px"
@@ -84,7 +71,6 @@ export const Feedback = ({
           <Button
             onClick={() => {
               if (feedback.length > 0) {
-                console.log(feedback);
                 mixpanel.track("Feedback sent.", {
                   feedback,
                 });

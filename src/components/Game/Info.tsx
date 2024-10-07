@@ -8,7 +8,6 @@ import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { View } from "./Game";
 import mixpanel from "mixpanel-browser";
-import { BONUS_LIMIT } from "../../constants";
 
 export const shareOnClick = async (
   points: number,
@@ -18,18 +17,12 @@ export const shareOnClick = async (
   setNotice: (notice: string) => void
 ) => {
   let firstLine = `I'm playing PCT!`;
-
-  const superWords = words.filter(
-    (word) => word.word.length > BONUS_LIMIT
-  ).length;
   if (words.length >= target) {
     firstLine = `I beat ${letters
       .map((letter) => letter.toUpperCase())
-      .join(".")}${
-      superWords > 0 ? ` and found ${superWords} super words!` : "!"
-    }`;
+      .join(".")} with ${points} points!`;
   } else if (points > 0) {
-    firstLine = `I'm playing PCT!\nI've found ${superWords} super words so far!`;
+    firstLine = `I'm playing PCT!\nI have ${points} points in ${words.length} words so far!`;
   }
 
   const text = `${firstLine}\n\nPlay now!`;
