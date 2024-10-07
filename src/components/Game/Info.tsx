@@ -40,12 +40,16 @@ export const shareOnClick = async (
         window.location.href = url;
       }, 2000);
     }
-    mixpanel.track("Share button clicked.", {
-      words,
-      letters,
-      points,
-      usedShare: navigator.canShare(data),
-    });
+    try {
+      mixpanel.track("Share button clicked.", {
+        words,
+        letters,
+        points,
+        usedShare: navigator.canShare(data),
+      });
+    } catch (e) {
+      console.error("Error sharing", e);
+    }
   } catch (e) {
     console.error("Error sharing", e);
   }

@@ -71,9 +71,13 @@ export const Feedback = ({
           <Button
             onClick={() => {
               if (feedback.length > 0) {
-                mixpanel.track("Feedback sent.", {
-                  feedback,
-                });
+                try {
+                  mixpanel.track("Feedback sent.", {
+                    feedback,
+                  });
+                } catch (e) {
+                  console.log(e);
+                }
                 onClose();
               }
             }}

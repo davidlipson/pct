@@ -105,12 +105,16 @@ const App = () => {
       return;
     }
     localStorage.setItem(localStorageId, JSON.stringify({ words, letters }));
-    mixpanel.track("Someone is playing.", {
-      totalWords: words.length,
-      letters,
-      points: words.reduce((acc, curr) => acc + curr.points, 0),
-      beatGame: words.length >= target,
-    });
+    try {
+      mixpanel.track("Someone is playing.", {
+        totalWords: words.length,
+        letters,
+        points: words.reduce((acc, curr) => acc + curr.points, 0),
+        beatGame: words.length >= target,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }, [words]);
 
   const points = words.reduce((acc, curr) => acc + curr.points, 0);
