@@ -2,17 +2,13 @@ import { Drawer, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useContext } from "react";
-import { GameContext } from "../../App";
-import {
-  calculatePoints,
-  firstMatchingWord,
-  wordWithLettersNotInOrder,
-} from "../../utils";
+import { calculatePoints } from "../../utils";
 import { Guess } from "./Guess";
-import { BONUS_LIMIT, ColourScheme, LEVEL_NAMES } from "../../constants";
+import { BONUS_LIMIT, LEVEL_NAMES, WORDS_GOAL } from "../../constants";
 import { View } from "./Game";
 import { PointsProgress } from "./PointsProgress";
 import CloseIcon from "@mui/icons-material/Close";
+import { GameContext } from "./contexts/GameContext";
 
 const InnerStack = styled(Stack)(({ theme }) => ({
   backgroundColor: "white",
@@ -43,12 +39,9 @@ export const HowToPlay = ({
   setView: any;
 }) => {
   const {
-    letters: { letters },
-    target,
+    letters: { letters, validExample, invalidExample },
   } = useContext(GameContext);
-  const validWord = firstMatchingWord(letters).toUpperCase();
-  const validPoints = calculatePoints(validWord);
-  const invalidWord = wordWithLettersNotInOrder(letters).toUpperCase();
+  const validPoints = calculatePoints(validExample);
   return (
     <Drawer anchor="bottom" open={open} onClose={() => setView(View.GAME)}>
       <Stack alignItems="center" padding="24px">
@@ -81,7 +74,7 @@ export const HowToPlay = ({
                 </strong>
               </DirectionText>
               <DirectionText>
-                Your goal is to create the <strong>{target}</strong> longest
+                Your goal is to create the <strong>{WORDS_GOAL}</strong> longest
                 words you can with these letters.
               </DirectionText>
               <DirectionText>
@@ -132,14 +125,14 @@ export const HowToPlay = ({
                 justifyContent="space-between"
               >
                 <Stack spacing={1}>
-                  <Guess guess={validWord} example />
+                  <Guess guess={validExample} example />
                   <DirectionText>
                     is a valid word worth <strong>{validPoints} points</strong>{" "}
                     (there's a freeby!)
                   </DirectionText>
                 </Stack>
                 <Stack spacing={1}>
-                  <Guess guess={invalidWord} example />
+                  <Guess guess={invalidExample} example />
                   <DirectionText>
                     is not because{" "}
                     <strong>

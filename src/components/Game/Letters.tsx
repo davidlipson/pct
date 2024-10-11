@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { GameContext } from "../../App";
+import { GameContext } from "./contexts/GameContext";
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { LETTERS } from "../../constants/constants";

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { GameContext } from "../../App";
+import { GameContext } from "./contexts/GameContext";
 import { ColourScheme, LEVEL_NAMES } from "../../constants";
 import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { calculatePoints } from "../../utils";

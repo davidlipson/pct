@@ -2,23 +2,23 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SendIcon from "@mui/icons-material/Send";
 import { useContext } from "react";
-import { GameContext, Word } from "../../App";
+import { GameContext, Word } from "./contexts/GameContext";
 import CancelIcon from "@mui/icons-material/Cancel";
 import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { View } from "./Game";
 import mixpanel from "mixpanel-browser";
+import { WORDS_GOAL } from "../../constants";
 
 export const shareOnClick = async (
   points: number,
   letters: string[],
   words: Word[],
-  target: number,
   setNotice: (notice: string) => void
 ) => {
   let firstLine = `I'm playing PCT!\n`;
 
-  if (words.length >= target) {
+  if (words.length >= WORDS_GOAL) {
     firstLine = `I beat ${letters
       .map((letter) => letter.toUpperCase())
       .join(".")}!\n`;
@@ -78,7 +78,6 @@ export const Info = ({
     words,
     letters: { letters },
     points,
-    target,
   } = useContext(GameContext);
   return (
     <>
@@ -116,7 +115,7 @@ export const Info = ({
           },
         })}
         onClick={async () => {
-          shareOnClick(points, letters, words, target, setNotice);
+          shareOnClick(points, letters, words, setNotice);
         }}
       >
         <SendIcon />

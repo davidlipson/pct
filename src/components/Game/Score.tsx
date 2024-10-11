@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import { ColourScheme } from "../../constants/colourScheme";
 import { useContext } from "react";
-import { GameContext } from "../../App";
+import { GameContext } from "./contexts/GameContext";
 import { styled } from "@mui/material/styles";
 import "react-circular-progressbar/dist/styles.css";
 import { BONUS_LIMIT } from "../../constants";
@@ -26,7 +26,7 @@ export const Score = ({
   found: number;
   currentGuess: string;
 }) => {
-  const { points, words, target } = useContext(GameContext);
+  const { points } = useContext(GameContext);
   return (
     <Stack direction="row" alignItems="baseline">
       <Stack direction="row">

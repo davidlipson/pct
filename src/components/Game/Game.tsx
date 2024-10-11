@@ -1,24 +1,19 @@
 import { useEffect, useRef, useState, useContext } from "react";
-import {
-  Guess,
-  HowToPlay,
-  Keyboard,
-  Letters,
-  Notice,
-  Score,
-  Info,
-  Words,
-  Login,
-  Progress,
-  ShareText,
-  Feedback,
-  PointsProgress,
-} from ".";
 import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/material";
-import { calculatePoints, isSubSequence } from "../../utils";
-import { GameContext } from "../../App";
-import { ALL_WORDS, MAX_LENGTH, MIN_LENGTH } from "../../constants";
+import { MAX_LENGTH, WORDS_GOAL } from "../../constants";
+import { GameContext } from "./contexts/GameContext";
+import { HowToPlay } from "./HowToPlay";
+import { Info } from "./Info";
+import { Feedback } from "./Feedback";
+import { Score } from "./Score";
+import { PointsProgress } from "./PointsProgress";
+import { Letters } from "./Letters";
+import { Notice } from "./Notice";
+import { ShareText } from "./ShareText";
+import { Keyboard } from "./Keyboard";
+import { Words } from "./Words";
+import { Guess } from "./Guess";
 
 export enum View {
   GAME = "GAME",
@@ -93,12 +88,7 @@ const BottomContainer = styled(Stack)(({ theme }) => ({
 
 export const Game = () => {
   const ref = useRef(null);
-  const {
-    words,
-    letters: { letters },
-    addWord,
-    target,
-  } = useContext(GameContext);
+  const { addWord, words } = useContext(GameContext);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
@@ -110,76 +100,17 @@ export const Game = () => {
     null
   );
 
-  const isRepeatWord = (word: string) => {
-    // can't be a repeat word!
-    const alreadyFound = words.find((w) => w.word === word);
-    if (alreadyFound) {
-      return true;
-    }
-    return false;
-  };
-
-  const validateWord = async (
-    word: string
-  ): Promise<{ status: boolean; notice: string }> => {
-    if (word.length < MIN_LENGTH) {
-      return {
-        status: false,
-        notice: `${MIN_LENGTH} characters or longer!`,
-      };
-    }
-
-    if (isRepeatWord(word)) {
-      return {
-        status: false,
-        notice: "Already found!",
-      };
-    }
-
-    if (!ALL_WORDS.includes(word)) {
-      /*const result = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
-        {
-          method: "GET",
-        }
-      );
-
-      if (result.status !== 200) {*/
-      return {
-        status: false,
-        notice: "Not found!",
-      };
-      /* }
-
-      mixpanel.track("Word not in dictionary.", {
-        word,
-      });*/
-    }
-
-    // check if word has letters in order
-    const isSub = isSubSequence(letters, word);
-    return {
-      status: isSub,
-      notice: isSub ? "" : "Use today's letters in order!",
-    };
-  };
-
   const submitWord = async (word: string): Promise<boolean> => {
-    // check if word is valid
-    const { status: isValid, notice } = await validateWord(word);
+    const { valid, message, points } = await addWord(word);
 
-    // if invalid return early
-    if (!isValid) {
-      setNotice(notice);
+    if (!valid) {
+      setNotice(message);
       setFound(0);
       return false;
     }
 
-    // if valid, calculate points and update add points to total
-    const points = calculatePoints(word);
     setFound(points);
     setNotice(null);
-    addWord(word, points);
     return true;
   };
 
@@ -188,7 +119,7 @@ export const Game = () => {
   }, [ref]);
 
   const updateCurrentGuess = async (key: string) => {
-    if (!allowTyping || words.length >= target || View.GAME !== view) {
+    if (!allowTyping || words.length >= WORDS_GOAL || View.GAME !== view) {
       return;
     }
     if (backspaceTimer) {
@@ -298,7 +229,7 @@ export const Game = () => {
               },
             })}
           >
-            {words.length < target ? (
+            {words.length < WORDS_GOAL ? (
               <Notice notice={notice} />
             ) : (
               <ShareText setNotice={setNotice} />
@@ -306,7 +237,7 @@ export const Game = () => {
           </Box>
         </TopContainer>
         <BottomContainer>
-          {!wordsExpanded && words.length < target && (
+          {!wordsExpanded && words.length < WORDS_GOAL && (
             <Stack spacing={0.75}>
               <Guess
                 guessIndex={guessIndex}
@@ -318,11 +249,11 @@ export const Game = () => {
           )}
           <Stack spacing={1}>
             <Words
-              expanded={wordsExpanded || words.length >= target}
+              expanded={wordsExpanded || words.length >= WORDS_GOAL}
               setExpanded={setExpanded}
             />
           </Stack>
-          {!wordsExpanded && words.length < target && (
+          {!wordsExpanded && words.length < WORDS_GOAL && (
             <Keyboard
               startBackspaceTimer={startBackspaceTimer}
               submitKey={updateCurrentGuess}
@@ -336,12 +267,11 @@ export const Game = () => {
               },
             })}
           >
-            {words.length >= target && <ShareText setNotice={setNotice} />}
+            {words.length >= WORDS_GOAL && <ShareText setNotice={setNotice} />}
             <Notice notice={notice} />
           </Box>
         </BottomContainer>
       </InnerContainer>
-      {false && <Login setAllowTyping={setAllowTyping} />}
     </AppContainer>
   );
 };
