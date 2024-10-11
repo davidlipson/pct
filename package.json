@@ -55,5 +55,6 @@
   },
   "devDependencies": {
     "@types/uuid": "^9.0.8"
-  }
+  },
+  "proxy": "https://pct-api-ca2859563120.herokuapp.com"
 }
