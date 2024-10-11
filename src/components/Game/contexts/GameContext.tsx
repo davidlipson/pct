@@ -78,7 +78,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const fetchLettersOfTheDay = async () => {
-    const response = await fetch(`/today`, {
+    const response = await fetch(`${process.env.REACT_APP_API}/today`, {
       method: "GET",
     });
     if (response.ok) {
