@@ -11,6 +11,11 @@ import mixpanel from "mixpanel-browser";
 import { ColourScheme, WORDS_GOAL } from "../../constants";
 import dayjs from "dayjs";
 
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 export const shareOnClick = async (
   points: number,
   letters: string[],
@@ -83,9 +88,9 @@ export const Info = ({
   } = useContext(GameContext);
   let currentStreak = user.streak || 0;
   const dayjsLastWon = user.lastwondate
-    ? dayjs(user.lastwondate).format("YYYY-MM-DD")
+    ? dayjs(user.lastwondate).tz("America/Toronto").format("YYYY-MM-DD")
     : null;
-  const today = dayjs().format("YYYY-MM-DD");
+  const today = dayjs().tz("America/Toronto").format("YYYY-MM-DD");
   const newlyWon = words.length >= WORDS_GOAL;
   if (newlyWon && dayjsLastWon !== today) {
     currentStreak++;
