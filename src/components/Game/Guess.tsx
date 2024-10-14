@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { GameContext } from "../../App";
 import { Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ColourScheme } from "../../constants/colourScheme";
 import { BONUS_LIMIT, MAX_LENGTH, SHOW_CHARS } from "../../constants";
+import { GameContext } from "./contexts/GameContext";
 
 const Letter = styled(Stack)<{
   example: boolean;
@@ -122,6 +122,7 @@ export const Guess = ({
               to: {
                 backgroundColor: ColourScheme.SUPER,
                 border: `1px solid ${ColourScheme.SUPER} !important`,
+                color: "black",
               },
             },
             "@keyframes rocking": {

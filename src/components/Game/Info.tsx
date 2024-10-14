@@ -2,23 +2,29 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SendIcon from "@mui/icons-material/Send";
 import { useContext } from "react";
-import { GameContext, Word } from "../../App";
+import { GameContext, Word } from "./contexts/GameContext";
 import CancelIcon from "@mui/icons-material/Cancel";
 import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { View } from "./Game";
 import mixpanel from "mixpanel-browser";
+import { ColourScheme, WORDS_GOAL } from "../../constants";
+import dayjs from "dayjs";
+
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const shareOnClick = async (
   points: number,
   letters: string[],
   words: Word[],
-  target: number,
   setNotice: (notice: string) => void
 ) => {
   let firstLine = `I'm playing PCT!\n`;
 
-  if (words.length >= target) {
+  if (words.length >= WORDS_GOAL) {
     firstLine = `I beat ${letters
       .map((letter) => letter.toUpperCase())
       .join(".")}!\n`;
@@ -76,10 +82,21 @@ export const Info = ({
 }) => {
   const {
     words,
+    user,
     letters: { letters },
     points,
-    target,
   } = useContext(GameContext);
+  let currentStreak = user.streak || 0;
+  const dayjsLastWon = user.lastwondate
+    ? dayjs(user.lastwondate).tz("America/Toronto").format("YYYY-MM-DD")
+    : null;
+
+  const today = dayjs().tz("America/Toronto").format("YYYY-MM-DD");
+  const newlyWon = words.length >= WORDS_GOAL;
+  if (newlyWon && dayjsLastWon !== today) {
+    currentStreak++;
+  }
+  // fix
   return (
     <>
       <Button
@@ -92,6 +109,47 @@ export const Info = ({
       >
         {view === View.HOW_TO_PLAY ? <CancelIcon /> : <HelpIcon />}
       </Button>
+      {false && currentStreak > 0 && (
+        <Button
+          sx={{
+            right: "calc(50% - 50px)",
+            zIndex: 15,
+          }}
+        >
+          <Box
+            fontSize="10px"
+            color={ColourScheme.SUPER}
+            width="100px"
+            height="15px"
+            bgcolor={ColourScheme.WHITE}
+            textAlign="center"
+            lineHeight="15px"
+            borderRadius="5px"
+            marginTop="5px"
+            sx={{
+              "@keyframes onFire": {
+                from: {
+                  color: ColourScheme.SUPER,
+                  backgroundColor: ColourScheme.WHITE,
+                },
+                to: {
+                  color: ColourScheme.WHITE,
+                  backgroundColor: ColourScheme.SUPER,
+                },
+              },
+              animation: `${newlyWon ? "onFire 2s infinite" : ""}`,
+              animationIterationCount: 1,
+              animationFillMode: "forwards",
+            }}
+            style={{
+              outline: `1px solid ${ColourScheme.SUPER}`,
+              border: `0.5px solid ${ColourScheme.WHITE}`,
+            }}
+          >
+            {currentStreak} {currentStreak < 999 ? "DAY" : ""} STREAK
+          </Box>
+        </Button>
+      )}
       {false && (
         <Button
           key="leaderboard"
@@ -116,7 +174,7 @@ export const Info = ({
           },
         })}
         onClick={async () => {
-          shareOnClick(points, letters, words, target, setNotice);
+          shareOnClick(points, letters, words, setNotice);
         }}
       >
         <SendIcon />

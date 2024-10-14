@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { GameContext } from "../../App";
+import { GameContext } from "./contexts/GameContext";
 import { styled } from "@mui/material/styles";
 import {
   Accordion,
@@ -11,12 +11,17 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ColourScheme } from "../../constants/colourScheme";
-import { BONUS_LIMIT } from "../../constants";
+import { BONUS_LIMIT, WORDS_GOAL } from "../../constants";
 
-const WordStack = styled(Stack)(({ theme }) => ({
-  maxHeight: "300px",
-  overflowY: "scroll",
-}));
+const WordStack = styled(Stack)<{ completed: boolean }>(
+  ({ theme, completed }) => ({
+    maxHeight: "300px",
+    overflowY: "scroll",
+    [theme.breakpoints.down("sm")]: {
+      maxHeight: completed ? "480px" : "300px",
+    },
+  })
+);
 
 const Entry = styled(Stack)(({ theme }) => ({
   flexDirection: "row",
@@ -32,12 +37,7 @@ export const Words = ({
   expanded: boolean;
   setExpanded: (val: boolean) => void;
 }) => {
-  const {
-    words,
-    target,
-    points,
-    letters: { levels },
-  } = useContext(GameContext);
+  const { words } = useContext(GameContext);
   const alphabeticallySorted = words.sort((a, b) => {
     if (a.word < b.word) {
       return -1;
@@ -58,8 +58,8 @@ export const Words = ({
 
   useEffect(() => {
     let total = `You hit today's goal! Now go outside.`;
-    if (words.length < target) {
-      total = `${words.length} / ${target} words found`;
+    if (words.length < WORDS_GOAL) {
+      total = `${words.length} / ${WORDS_GOAL} words found`;
     }
     setText(total);
   }, [words]);
@@ -92,7 +92,11 @@ export const Words = ({
             margin: 0,
           }}
           expandIcon={
-            words.length && words.length < target ? <ExpandMoreIcon /> : <></>
+            words.length && words.length < WORDS_GOAL ? (
+              <ExpandMoreIcon />
+            ) : (
+              <></>
+            )
           }
           aria-controls="panel1-content"
           id="panel1-header"
@@ -105,7 +109,11 @@ export const Words = ({
             paddingX: 0,
           }}
         >
-          <WordStack width={1} direction="column">
+          <WordStack
+            completed={words.length >= WORDS_GOAL}
+            width={1}
+            direction="column"
+          >
             {alphabeticallySorted.map(({ word, points }, index) => (
               <Entry key={index}>
                 <Stack direction="row" spacing={1} alignItems="baseline">

@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { GameContext } from "../../App";
-import { ColourScheme } from "../../constants";
+import { GameContext } from "./contexts/GameContext";
+import { ColourScheme, WORDS_GOAL } from "../../constants";
 import { Box, Stack } from "@mui/material";
 
 export const Progress = () => {
-  const { words, target } = useContext(GameContext);
+  const { words } = useContext(GameContext);
 
-  if (words.length >= target) {
+  if (words.length >= WORDS_GOAL) {
     return (
       <Stack
         width={1}
@@ -33,7 +33,7 @@ export const Progress = () => {
     );
   }
 
-  const bars = new Array(target).fill(0).map((_, i) => {
+  const bars = new Array(WORDS_GOAL).fill(0).map((_, i) => {
     const found = i < words.length;
     return found ? true : false;
   });

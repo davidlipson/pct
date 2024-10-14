@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useContext } from "react";
-import { GameContext } from "../../App";
+import { GameContext } from "./contexts/GameContext";
 import { shareOnClick } from "./Info";
 import { ColourScheme } from "../../constants";
 
@@ -13,7 +13,6 @@ export const ShareText = ({
     points,
     letters: { letters },
     words,
-    target,
   } = useContext(GameContext);
   return (
     <Stack width={1} alignItems="center">
@@ -29,7 +28,7 @@ export const ShareText = ({
           },
         }}
         onClick={() => {
-          shareOnClick(points, letters, words, target, setNotice);
+          shareOnClick(points, letters, words, setNotice);
         }}
       >
         <Typography textAlign="center" fontWeight={500}>

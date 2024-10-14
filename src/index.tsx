@@ -3,6 +3,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import mixpanel from "mixpanel-browser";
+import { GameProvider } from "./components/Game/contexts/GameContext";
 
 // Near entry of your product, init Mixpanel
 mixpanel.init(process.env.REACT_APP_MP, {
@@ -14,7 +15,11 @@ mixpanel.init(process.env.REACT_APP_MP, {
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(<App />);
+root.render(
+  <GameProvider>
+    <App />
+  </GameProvider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -19,6 +19,7 @@
     "dotenv": "^16.4.5",
     "fs": "^0.0.1-security",
     "mixpanel-browser": "^2.55.1",
+    "ordinal": "^1.0.3",
     "react": "^18.3.1",
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18.3.1",
@@ -55,5 +56,6 @@
   },
   "devDependencies": {
     "@types/uuid": "^9.0.8"
-  }
+  },
+  "proxy": "https://pct-api-ca2859563120.herokuapp.com/"
 }
