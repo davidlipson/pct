@@ -6,11 +6,12 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ColourScheme } from "../../constants";
 import CloseIcon from "@mui/icons-material/Close";
 
 import mixpanel from "mixpanel-browser";
+import { GameContext } from "./contexts/GameContext";
 
 const InnerStack = styled(Stack)(({ theme }) => ({
   backgroundColor: "white",
@@ -40,6 +41,7 @@ export const Feedback = ({
   open: boolean;
   onClose: any;
 }) => {
+  const { user } = useContext(GameContext);
   const [feedback, setFeedback] = useState("");
   return (
     <Drawer anchor="bottom" open={open} onClose={onClose}>
@@ -74,6 +76,7 @@ export const Feedback = ({
                 try {
                   mixpanel.track("Feedback sent.", {
                     feedback,
+                    user,
                   });
                 } catch (e) {
                   console.log(e);

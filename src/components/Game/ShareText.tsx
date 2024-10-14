@@ -12,6 +12,7 @@ export const ShareText = ({
   const {
     points,
     letters: { letters },
+    user,
     words,
   } = useContext(GameContext);
   return (
@@ -28,7 +29,7 @@ export const ShareText = ({
           },
         }}
         onClick={() => {
-          shareOnClick(points, letters, words, setNotice);
+          shareOnClick(points, letters, words, setNotice, user);
         }}
       >
         <Typography textAlign="center" fontWeight={500}>

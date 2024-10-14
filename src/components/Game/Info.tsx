@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SendIcon from "@mui/icons-material/Send";
 import { useContext } from "react";
-import { GameContext, Word } from "./contexts/GameContext";
+import { GameContext, User, Word } from "./contexts/GameContext";
 import CancelIcon from "@mui/icons-material/Cancel";
 import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
@@ -20,7 +20,8 @@ export const shareOnClick = async (
   points: number,
   letters: string[],
   words: Word[],
-  setNotice: (notice: string) => void
+  setNotice: (notice: string) => void,
+  user: User
 ) => {
   let firstLine = `I'm playing PCT!\n`;
 
@@ -52,6 +53,7 @@ export const shareOnClick = async (
         letters,
         points,
         usedShare: navigator.canShare(data),
+        user,
       });
     } catch (e) {
       console.error("Error sharing", e);
@@ -174,7 +176,7 @@ export const Info = ({
           },
         })}
         onClick={async () => {
-          shareOnClick(points, letters, words, setNotice);
+          shareOnClick(points, letters, words, setNotice, user);
         }}
       >
         <SendIcon />

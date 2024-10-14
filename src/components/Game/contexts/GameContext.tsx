@@ -153,6 +153,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         letters,
         points: validation.myWords.reduce((acc, curr) => acc + curr.points, 0),
         beatGame: validation.myWords.length >= WORDS_GOAL,
+        user,
       });
       setWords(validation.myWords);
     }
