@@ -64,9 +64,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   // move userId out of fetch req
   const fetchLettersOfTheDay = async (userid: string) => {
-    const response = await fetch(`/today?userId=${userid}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_PCT_API}/today?userId=${userid}`,
+      {
+        method: "GET",
+      }
+    );
     if (response.ok) {
       const { todaysLetters, myWords } = await response.json();
       setLetters(todaysLetters);
@@ -80,9 +83,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = async (userid: string) => {
-    const response = await fetch(`/login?userId=${userid}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_PCT_API}/login?userId=${userid}`,
+      {
+        method: "GET",
+      }
+    );
     if (response.ok) {
       const user: User = await response.json();
       setUser(user);
@@ -111,7 +117,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       username: name,
     }));
     const data = JSON.stringify({ userId: user.userid, username: name });
-    await fetch(`/setUsername`, {
+    await fetch(`${process.env.REACT_APP_PCT_API}/setUsername`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -122,9 +128,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getLeaderboard = async () => {
-    const response = await fetch(`/leaderboard`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_PCT_API}/leaderboard`,
+      {
+        method: "GET",
+      }
+    );
     if (response.ok) {
       const leaderboard = await response.json();
       setLeaderboard(leaderboard);

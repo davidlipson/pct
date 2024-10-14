@@ -58,9 +58,12 @@ export const validateWord = async (
     };
   }
 
-  const response = await fetch(`/validate?word=${word}&userId=${userId}`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `${process.env.REACT_APP_PCT_API}/validate?word=${word}&userId=${userId}`,
+    {
+      method: "GET",
+    }
+  );
   const data: ValidationResponse = await response.json();
   return {
     ...data,
