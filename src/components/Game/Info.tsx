@@ -90,6 +90,12 @@ export const Info = ({
   const dayjsLastWon = user.lastwondate
     ? dayjs(user.lastwondate).tz("America/Toronto").format("YYYY-MM-DD")
     : null;
+  console.log(
+    user.lastwondate,
+    dayjs(user.lastwondate).format("YYYY-MM-DD"),
+    dayjs(user.lastwondate).tz("America/Toronto").format("YYYY-MM-DD"),
+    dayjs().tz("America/Toronto").format("YYYY-MM-DD")
+  );
   const today = dayjs().tz("America/Toronto").format("YYYY-MM-DD");
   const newlyWon = words.length >= WORDS_GOAL;
   if (newlyWon && dayjsLastWon !== today) {
