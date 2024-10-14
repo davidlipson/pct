@@ -13,10 +13,15 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ColourScheme } from "../../constants/colourScheme";
 import { BONUS_LIMIT, WORDS_GOAL } from "../../constants";
 
-const WordStack = styled(Stack)(({ theme }) => ({
-  maxHeight: "300px",
-  overflowY: "scroll",
-}));
+const WordStack = styled(Stack)<{ completed: boolean }>(
+  ({ theme, completed }) => ({
+    maxHeight: "300px",
+    overflowY: "scroll",
+    [theme.breakpoints.down("sm")]: {
+      maxHeight: completed ? "480px" : "300px",
+    },
+  })
+);
 
 const Entry = styled(Stack)(({ theme }) => ({
   flexDirection: "row",
@@ -104,7 +109,11 @@ export const Words = ({
             paddingX: 0,
           }}
         >
-          <WordStack width={1} direction="column">
+          <WordStack
+            completed={words.length >= WORDS_GOAL}
+            width={1}
+            direction="column"
+          >
             {alphabeticallySorted.map(({ word, points }, index) => (
               <Entry key={index}>
                 <Stack direction="row" spacing={1} alignItems="baseline">

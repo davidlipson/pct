@@ -14,6 +14,7 @@ import { ShareText } from "./ShareText";
 import { Keyboard } from "./Keyboard";
 import { Words } from "./Words";
 import { Guess } from "./Guess";
+import { Leaderboard } from "./Leaderboard";
 
 export enum View {
   GAME = "GAME",
@@ -92,7 +93,9 @@ export const Game = () => {
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [notice, setNotice] = useState<string>(null);
   const [found, setFound] = useState<number>(null);
-  const [view, setView] = useState<View>(View.HOW_TO_PLAY);
+  const [view, setView] = useState<View>(
+    words.length >= 0 ? View.GAME : View.HOW_TO_PLAY
+  );
   const [wordsExpanded, setExpanded] = useState<boolean>(false);
   const [guessIndex, setGuessIndex] = useState<number>(0);
   const [allowTyping, setAllowTyping] = useState<boolean>(true);
@@ -213,6 +216,7 @@ export const Game = () => {
     >
       <Info view={view} setView={setView} setNotice={setNotice} />
       <HowToPlay open={view === View.HOW_TO_PLAY} setView={setView} />
+      <Leaderboard open={view === View.LEADERBOARD} setView={setView} />
       <Feedback
         open={view === View.FEEDBACK}
         onClose={() => setView(View.GAME)}

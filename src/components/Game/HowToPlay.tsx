@@ -14,7 +14,7 @@ const InnerStack = styled(Stack)(({ theme }) => ({
   backgroundColor: "white",
   width: "100%",
   maxWidth: "800px",
-  maxHeight: "75vh",
+  maxHeight: "85vh",
   borderRadius: "7px",
   [theme.breakpoints.down("md")]: {
     maxWidth: "100%",
@@ -144,7 +144,14 @@ export const HowToPlay = ({
               </Stack>
             </Stack>
 
-            <Stack spacing={1}>
+            <Stack
+              spacing={1}
+              sx={(theme) => ({
+                [theme.breakpoints.down("sm")]: {
+                  paddingBottom: "36px",
+                },
+              })}
+            >
               <HeaderText>Enjoy!</HeaderText>
 
               <DirectionText

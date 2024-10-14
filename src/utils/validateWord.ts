@@ -19,6 +19,7 @@ export type ValidationResponse = {
   valid: boolean;
   points?: number;
   message?: string;
+  myWords?: Word[];
 };
 
 export const validateWord = async (
@@ -57,12 +58,9 @@ export const validateWord = async (
     };
   }
 
-  const response = await fetch(
-    `${process.env.REACT_APP_API}/validate?word=${word}&userId=${userId}`,
-    {
-      method: "GET",
-    }
-  );
+  const response = await fetch(`/validate?word=${word}&userId=${userId}`, {
+    method: "GET",
+  });
   const data: ValidationResponse = await response.json();
   return {
     ...data,

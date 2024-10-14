@@ -8,7 +8,8 @@ import HelpIcon from "@mui/icons-material/Help";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { View } from "./Game";
 import mixpanel from "mixpanel-browser";
-import { WORDS_GOAL } from "../../constants";
+import { ColourScheme, WORDS_GOAL } from "../../constants";
+import dayjs from "dayjs";
 
 export const shareOnClick = async (
   points: number,
@@ -76,9 +77,19 @@ export const Info = ({
 }) => {
   const {
     words,
+    user,
     letters: { letters },
     points,
   } = useContext(GameContext);
+  let currentStreak = user.streak || 0;
+  const dayjsLastWon = user.lastwondate
+    ? dayjs(user.lastwondate).format("YYYY-MM-DD")
+    : null;
+  const today = dayjs().format("YYYY-MM-DD");
+  const newlyWon = words.length >= WORDS_GOAL;
+  if (newlyWon && dayjsLastWon !== today) {
+    currentStreak++;
+  }
   return (
     <>
       <Button
@@ -91,6 +102,46 @@ export const Info = ({
       >
         {view === View.HOW_TO_PLAY ? <CancelIcon /> : <HelpIcon />}
       </Button>
+      {currentStreak > 0 && (
+        <Button
+          sx={{
+            right: "calc(50% - 50px)",
+          }}
+        >
+          <Box
+            fontSize="10px"
+            color={ColourScheme.SUPER}
+            width="100px"
+            height="15px"
+            bgcolor={ColourScheme.WHITE}
+            textAlign="center"
+            lineHeight="15px"
+            borderRadius="5px"
+            marginTop="5px"
+            sx={{
+              "@keyframes onFire": {
+                from: {
+                  color: ColourScheme.SUPER,
+                  backgroundColor: ColourScheme.WHITE,
+                },
+                to: {
+                  color: ColourScheme.WHITE,
+                  backgroundColor: ColourScheme.SUPER,
+                },
+              },
+              animation: `${newlyWon ? "onFire 2s infinite" : ""}`,
+              animationIterationCount: 1,
+              animationFillMode: "forwards",
+            }}
+            style={{
+              outline: `1px solid ${ColourScheme.SUPER}`,
+              border: `0.5px solid ${ColourScheme.WHITE}`,
+            }}
+          >
+            {currentStreak} {currentStreak < 999 ? "DAY" : ""} STREAK
+          </Box>
+        </Button>
+      )}
       {false && (
         <Button
           key="leaderboard"

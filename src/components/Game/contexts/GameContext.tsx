@@ -4,18 +4,32 @@ import { WORDS_GOAL } from "../../../constants";
 import { validateWord, ValidationResponse } from "../../../utils";
 import { v4 as uuidv4 } from "uuid";
 
+export interface Word {
+  word: string;
+  points: number;
+}
+
+export interface User {
+  userid: string;
+  username?: string;
+  streak?: number;
+  lastwondate?: string;
+}
+
 export type LettersOfTheDay = {
   letters: string[];
   totalWords: number;
   levels: number[];
   validExample: string;
   invalidExample: string;
+  myWords: Word[];
 };
 
-export interface Word {
-  word: string;
-  points: number;
-}
+export type LeaderboardEntry = {
+  username: string;
+  userid: string;
+  score: number;
+};
 
 export type GameContextType = {
   letters: LettersOfTheDay;
@@ -24,6 +38,9 @@ export type GameContextType = {
   words: Word[];
   points: number;
   addWord: (word: string) => Promise<ValidationResponse>;
+  leaderboard: LeaderboardEntry[];
+  user: User;
+  setUsername: (name: string) => Promise<void>;
 };
 
 export type StoredValues = {
@@ -35,56 +52,25 @@ export const GameContext = createContext<GameContextType>({
   isLoading: true,
 } as GameContextType);
 
-export const localStorageId = "pct";
-export const uniqueBrowserId = "pct-id";
+export const pctUserId = "pct-user-id";
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [userId, setUserId] = useState<string>(null);
+  const [user, setUser] = useState<User>(null);
   const [failed, setFailed] = useState<boolean>(false);
   const [letters, setLetters] = useState<LettersOfTheDay>();
   const [words, setWords] = useState<Word[]>([]);
-  console.log(userId);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
-  const initializeStorage = (fetchedLetters: LettersOfTheDay) => {
-    try {
-      // setup user id
-      let id = localStorage.getItem(uniqueBrowserId);
-      if (!id) {
-        id = uuidv4();
-        localStorage.setItem(uniqueBrowserId, id);
-      }
-      setUserId(id);
-
-      // setup words and letters
-      const { words: storedWords, letters: storedLetters } = JSON.parse(
-        localStorage.getItem(localStorageId) || "{}"
-      ) as StoredValues;
-
-      // if letters changed on backend, reset words and storage
-      if (
-        fetchedLetters?.letters?.join("") !== storedLetters?.letters?.join("")
-      ) {
-        localStorage.setItem(
-          localStorageId,
-          JSON.stringify({ words: [], letters: fetchedLetters })
-        );
-      } else if (storedWords) {
-        setWords(storedWords);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const fetchLettersOfTheDay = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API}/today`, {
+  // move userId out of fetch req
+  const fetchLettersOfTheDay = async (userid: string) => {
+    const response = await fetch(`/today?userId=${userid}`, {
       method: "GET",
     });
     if (response.ok) {
-      const data = await response.json();
-      setLetters(data);
-      initializeStorage(data);
+      const { todaysLetters, myWords } = await response.json();
+      setLetters(todaysLetters);
+      setWords(myWords);
       setIsLoading(false);
       setFailed(false);
     } else {
@@ -93,42 +79,96 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const login = async (userid: string) => {
+    const response = await fetch(`/login?userId=${userid}`, {
+      method: "GET",
+    });
+    if (response.ok) {
+      const user: User = await response.json();
+      setUser(user);
+    } else {
+      setUser({ userid });
+    }
+  };
+
   useEffect(() => {
-    fetchLettersOfTheDay();
+    let userid = localStorage.getItem(pctUserId);
+    if (!userid) {
+      userid = uuidv4();
+      localStorage.setItem(pctUserId, userid);
+    }
+    login(userid);
   }, []);
 
-  // update local storage when a new word if found
   useEffect(() => {
-    if (words.length === 0) {
-      return;
+    if (!user) return;
+    fetchLettersOfTheDay(user.userid);
+  }, [user]);
+
+  const setUsernameHelper = async (name: string) => {
+    setUser((prev) => ({
+      ...prev,
+      username: name,
+    }));
+    const data = JSON.stringify({ userId: user.userid, username: name });
+    await fetch(`/setUsername`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: data,
+    });
+  };
+
+  const getLeaderboard = async () => {
+    const response = await fetch(`/leaderboard`, {
+      method: "GET",
+    });
+    if (response.ok) {
+      const leaderboard = await response.json();
+      setLeaderboard(leaderboard);
     }
-    // remove this once we store on backend
-    localStorage.setItem(localStorageId, JSON.stringify({ words, letters }));
-    try {
-      mixpanel.track("Someone is playing.", {
-        totalWords: words.length,
-        letters,
-        points: words.reduce((acc, curr) => acc + curr.points, 0),
-        beatGame: words.length >= WORDS_GOAL,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }, [words]);
+  };
 
   const addWord = async (word: string): Promise<ValidationResponse> => {
-    const validation = await validateWord(word, words, letters.letters, userId);
-    if (validation.valid) {
-      setWords([...words, { word, points: validation.points }]);
+    const validation = await validateWord(
+      word,
+      words,
+      letters.letters,
+      user.userid
+    );
+    if (validation.valid && validation.myWords) {
+      mixpanel.track("Someone is playing.", {
+        totalWords: validation.myWords.length,
+        letters,
+        points: validation.myWords.reduce((acc, curr) => acc + curr.points, 0),
+        beatGame: validation.myWords.length >= WORDS_GOAL,
+      });
+      setWords(validation.myWords);
     }
     return validation;
   };
+
+  /*useEffect(() => {
+    getLeaderboard();
+  }, [words]);*/
 
   const points = words.reduce((acc, curr) => acc + curr.points, 0);
 
   return (
     <GameContext.Provider
-      value={{ letters, isLoading, failed, addWord, words, points }}
+      value={{
+        letters,
+        isLoading,
+        failed,
+        addWord,
+        words,
+        points,
+        leaderboard,
+        user,
+        setUsername: setUsernameHelper,
+      }}
     >
       {children}
     </GameContext.Provider>

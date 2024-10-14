@@ -122,6 +122,7 @@ export const Guess = ({
               to: {
                 backgroundColor: ColourScheme.SUPER,
                 border: `1px solid ${ColourScheme.SUPER} !important`,
+                color: "black",
               },
             },
             "@keyframes rocking": {

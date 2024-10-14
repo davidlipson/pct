@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { GameContext } from "./contexts/GameContext";
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { LETTERS } from "../../constants/constants";
+import { LETTERS, WORDS_GOAL } from "../../constants/constants";
 import { ColourScheme } from "../../constants/colourScheme";
 
 const LetterContainer = styled(Stack)(({ theme }) => ({
@@ -23,6 +23,7 @@ export const Letters = () => {
   const [animate, setAnimate] = useState(true);
   const {
     letters: { letters },
+    words,
   } = useContext(GameContext);
 
   useEffect(() => {
@@ -32,10 +33,12 @@ export const Letters = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  const size = words.length >= WORDS_GOAL ? "40px" : "75px";
+
   return (
     <LetterContainer>
       {letters.map((letter, index) => (
-        <Box overflow="hidden" height="75px" width="75px">
+        <Box overflow="hidden" height={size} width={size}>
           <Stack
             sx={{
               animation: animate
@@ -48,7 +51,10 @@ export const Letters = () => {
                   transform: "translateY(0)",
                 },
                 "100%": {
-                  transform: "translateY(-750px)",
+                  transform:
+                    words.length >= WORDS_GOAL
+                      ? "translateY(-400px)"
+                      : "translateY(-750px)",
                 },
               },
               animationIterationCount: 1,
@@ -62,9 +68,9 @@ export const Letters = () => {
               getRandomLetters().map((letter) => (
                 <Typography
                   color={ColourScheme.DARK_GREY}
-                  height="75px"
-                  width="75px"
-                  variant="h2"
+                  height={size}
+                  width={size}
+                  variant={words.length >= WORDS_GOAL ? "h4" : "h2"}
                   textAlign="center"
                 >
                   {letter.toUpperCase()}
@@ -72,9 +78,9 @@ export const Letters = () => {
               ))}
             <Typography
               color={ColourScheme.BLACK}
-              height="75px"
-              width="75px"
-              variant="h2"
+              height={size}
+              width={size}
+              variant={words.length >= WORDS_GOAL ? "h4" : "h2"}
               textAlign="center"
             >
               {letter.toUpperCase()}
